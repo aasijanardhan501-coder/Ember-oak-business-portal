@@ -296,6 +296,22 @@
       .menu-grid { grid-template-columns: 1fr; }
       .filter-bar { gap: var(--space-2); }
     }
+
+    /* Text-only placeholder for items with removed images */
+    .menu-item-img-wrap.menu-item-text-only {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--clr-surface-2);
+      min-height: 10rem;
+      padding: var(--space-4);
+      color: var(--clr-muted);
+    }
+    .menu-item-text {
+      font-weight: 700;
+      font-size: 1rem;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -451,8 +467,8 @@
       </article>
 
       <article class="menu-item-card" data-category="starters" data-price="980">
-        <div class="menu-item-img-wrap">
-          <img src="images/menu-placeholder-1.svg" alt="Sesame Tuna Tataki" class="menu-item-img" loading="lazy" />
+        <div class="menu-item-img-wrap menu-item-text-only" role="img" aria-label="Sesame Tuna Tataki — image unavailable">
+          <div class="menu-item-text">Sesame Tuna Tataki</div>
           <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-gf">Gluten Free</span></div>
         </div>
         <div class="menu-item-body">
@@ -475,8 +491,8 @@
       </article>
 
       <article class="menu-item-card" data-category="starters" data-price="780">
-        <div class="menu-item-img-wrap">
-          <img src="images/menu-placeholder-2.svg" alt="Glazed Pork Belly Skewers" class="menu-item-img" loading="lazy" />
+        <div class="menu-item-img-wrap menu-item-text-only" role="img" aria-label="Glazed Pork Belly Skewers — image unavailable">
+          <div class="menu-item-text">Glazed Pork Belly Skewers</div>
           <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-chef">Chef's Choice</span></div>
         </div>
         <div class="menu-item-body">
@@ -501,8 +517,8 @@
       </article>
 
       <article class="menu-item-card" data-category="mains" data-price="1650">
-        <div class="menu-item-img-wrap">
-          <img src="images/menu-placeholder-3.svg" alt="Spatchcock Chicken" class="menu-item-img" loading="lazy" />
+        <div class="menu-item-img-wrap menu-item-text-only" role="img" aria-label="Spatchcock Chicken — image unavailable">
+          <div class="menu-item-text">Spatchcock Chicken</div>
           <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-gf">Gluten Free</span></div>
         </div>
         <div class="menu-item-body">
@@ -561,8 +577,8 @@
       </article>
 
       <article class="menu-item-card" data-category="mains" data-price="2200">
-        <div class="menu-item-img-wrap">
-          <img src="images/menu-placeholder-4.svg" alt="BBQ Baby Back Ribs" class="menu-item-img" loading="lazy" />
+        <div class="menu-item-img-wrap menu-item-text-only" role="img" aria-label="BBQ Baby Back Ribs — image unavailable">
+          <div class="menu-item-text">BBQ Baby Back Ribs</div>
           <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-spicy">Bold</span></div>
         </div>
         <div class="menu-item-body">
@@ -671,8 +687,8 @@
       </article>
 
       <article class="menu-item-card" data-category="desserts" data-price="580">
-        <div class="menu-item-img-wrap">
-          <img src="images/menu-placeholder-5.svg" alt="Wood-Oven Peach Cobbler" class="menu-item-img" loading="lazy" />
+        <div class="menu-item-img-wrap menu-item-text-only" role="img" aria-label="Wood-Oven Peach Cobbler — image unavailable">
+          <div class="menu-item-text">Wood-Oven Peach Cobbler</div>
           <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
         </div>
         <div class="menu-item-body">
