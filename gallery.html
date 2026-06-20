@@ -1,262 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gallery — Ember & Oak</title>
-  <meta name="description" content="Browse the Ember & Oak photo gallery — food, ambience, bar, and events. See what makes us Mumbai's most atmospheric restaurant." />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
+  <meta name="description"
+    content="Browse the Ember & Oak photo gallery — food, ambience, bar, and events. See what makes us Mumbai's most atmospheric restaurant." />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/animations.css" />
   <link rel="stylesheet" href="css/responsive.css" />
   <style>
-    .gallery-filter { display:flex; gap: var(--space-2); flex-wrap:wrap; justify-content:center; margin-bottom: var(--space-10); }
-    .gallery-filter-btn { padding: var(--space-2) var(--space-5); border-radius: var(--radius-full); font-size: var(--fs-sm); font-weight:500; color: var(--clr-muted); border:1px solid var(--clr-border); background: var(--clr-surface); transition: all var(--transition); cursor:pointer; }
-    .gallery-filter-btn:hover { color: var(--clr-text); border-color: var(--clr-primary); }
-    .gallery-filter-btn.active { background: var(--clr-primary); color: var(--clr-bg); border-color: var(--clr-primary); font-weight:600; box-shadow:0 4px 15px rgba(201,137,63,0.4); }
-    .gallery-grid-full { display:grid; grid-template-columns: repeat(3,1fr); gap: var(--space-4); }
-    .gallery-item-full { position:relative; border-radius: var(--radius-lg); overflow:hidden; cursor:pointer; border:1px solid var(--clr-border); }
-    .gallery-item-full img { width:100%; height:100%; object-fit:cover; display:block; transition: transform 0.6s var(--ease); }
-    .gallery-item-full:hover img { transform: scale(1.06); }
-    .gallery-item-full--tall { aspect-ratio: 3/4; }
-    .gallery-item-full--wide { aspect-ratio: 16/10; }
-    .gallery-item-full--square { aspect-ratio: 1; }
-    .g-overlay { position:absolute; inset:0; background: linear-gradient(to top, rgba(10,9,7,0.85), transparent 50%); opacity:0; transition: opacity var(--transition); display:flex; align-items:flex-end; padding: var(--space-5); }
-    .gallery-item-full:hover .g-overlay { opacity:1; }
-    .g-overlay-text { font-size: var(--fs-sm); font-weight:500; }
-    .g-zoom { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) scale(0); width:52px; height:52px; border-radius:50%; background: var(--clr-primary); display:flex; align-items:center; justify-content:center; font-size:1.3rem; transition: transform 0.3s var(--ease-bounce); }
-    .gallery-item-full:hover .g-zoom { transform:translate(-50%,-50%) scale(1); }
-    @media(max-width:768px){ .gallery-grid-full{ grid-template-columns: repeat(2,1fr); } }
-    @media(max-width:480px){ .gallery-grid-full{ grid-template-columns: 1fr; } }
+    .gallery-filter {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: var(--space-10);
+    }
+
+    .gallery-filter-btn {
+      padding: var(--space-2) var(--space-5);
+      border-radius: var(--radius-full);
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      color: var(--clr-muted);
+      border: 1px solid var(--clr-border);
+      background: var(--clr-surface);
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .gallery-filter-btn:hover {
+      color: var(--clr-text);
+      border-color: var(--clr-primary);
+    }
+
+    .gallery-filter-btn.active {
+      background: var(--clr-primary);
+      color: var(--clr-bg);
+      border-color: var(--clr-primary);
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(201, 137, 63, 0.4);
+    }
+
+    .gallery-grid-full {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+    }
+
+    .gallery-item-full {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid var(--clr-border);
+    }
+
+    .gallery-item-full img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s var(--ease);
+    }
+
+    .gallery-item-full:hover img {
+      transform: scale(1.06);
+    }
+
+    .gallery-item-full--tall {
+      aspect-ratio: 3/4;
+    }
+
+    .gallery-item-full--wide {
+      aspect-ratio: 16/10;
+    }
+
+    .gallery-item-full--square {
+      aspect-ratio: 1;
+    }
+
+    .g-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10, 9, 7, 0.85), transparent 50%);
+      opacity: 0;
+      transition: opacity var(--transition);
+      display: flex;
+      align-items: flex-end;
+      padding: var(--space-5);
+    }
+
+    .gallery-item-full:hover .g-overlay {
+      opacity: 1;
+    }
+
+    .g-overlay-text {
+      font-size: var(--fs-sm);
+      font-weight: 500;
+    }
+
+    .g-zoom {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--clr-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      transition: transform 0.3s var(--ease-bounce);
+    }
+
+    .gallery-item-full:hover .g-zoom {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    @media(max-width:768px) {
+      .gallery-grid-full {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:480px) {
+      .gallery-grid-full {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
+
 <body>
-<div id="page-loader" class="page-loader">
-  <div style="text-align:center">
-    <div class="loader-logo">Ember <span>&</span> Oak</div>
-    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-  </div>
-</div>
-<nav id="navbar" class="navbar scrolled" role="navigation">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo"><span class="nav-logo-name">Ember <span>&</span> Oak</span><span class="nav-logo-tagline">Wood-Fired · Craft Cocktails</span></a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link">Home</a><a href="menu.html" class="nav-link">Menu</a>
-      <a href="about.html" class="nav-link">About</a><a href="gallery.html" class="nav-link active">Gallery</a>
-      <a href="contact.html" class="nav-link">Contact</a>
-    </div>
-    <a href="reservations.html" class="btn btn-primary btn-sm nav-cta">Reserve a Table</a>
-    <button id="nav-hamburger" class="nav-hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-  </div>
-</nav>
-<div id="nav-drawer" class="nav-drawer">
-  <a href="index.html" class="nav-link">Home</a><a href="menu.html" class="nav-link">Menu</a>
-  <a href="about.html" class="nav-link">About</a><a href="gallery.html" class="nav-link">Gallery</a>
-  <a href="contact.html" class="nav-link">Contact</a>
-  <a href="reservations.html" class="btn btn-primary btn-lg" style="margin-top:1rem">Reserve a Table</a>
-</div>
-
-<div class="page-hero">
-  <div class="container text-center reveal">
-    <span class="section-label">A Feast for the Eyes</span>
-    <h1 class="section-title" style="font-size: var(--fs-4xl);">Gallery</h1>
-    <p class="section-subtitle" style="margin-inline:auto; margin-top: var(--space-4);">Every frame tells a story of fire, craft, and atmosphere. This is Ember & Oak through a lens.</p>
-  </div>
-</div>
-
-<section class="section" id="gallery-section">
-  <div class="container">
-    <!-- Filter -->
-    <div class="gallery-filter" role="group" aria-label="Gallery filters">
-      <button class="gallery-filter-btn active" data-filter="all"      id="gf-all">All</button>
-      <button class="gallery-filter-btn"        data-filter="food"     id="gf-food">🍽️ Food</button>
-      <button class="gallery-filter-btn"        data-filter="cocktails" id="gf-cocktails">🍹 Cocktails</button>
-      <button class="gallery-filter-btn"        data-filter="ambience" id="gf-ambience">✨ Ambience</button>
-      <button class="gallery-filter-btn"        data-filter="events"   id="gf-events">🎉 Events</button>
-    </div>
-
-    <!-- Gallery Grid -->
-    <div class="gallery-grid-full" id="gallery-grid" role="list">
-
-      <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="food" role="listitem">
-        <img src="images/placeholder.svg" alt="Oak-Smoked Ribeye" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Oak-Smoked Ribeye</span></div>
-        <div class="g-zoom">🔍</div>
+  <div id="page-loader" class="page-loader">
+    <div style="text-align:center">
+      <div class="loader-logo">Ember <span>&</span> Oak</div>
+      <div class="loader-bar">
+        <div class="loader-bar-fill"></div>
       </div>
-
-      <div class="gallery-item gallery-item-full gallery-item-full--tall" data-category="ambience" role="listitem">
-        <img src="images/placeholder.svg" alt="Restaurant Ambience" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Intimate Dining</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="cocktails" role="listitem">
-        <img src="images/placeholder.svg" alt="Smoke Old Fashioned" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Smoke & Ember Old Fashioned</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="food" role="listitem">
-        <img src="images/placeholder.svg" alt="Molten Chocolate Lava Cake" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Molten Chocolate Lava Cake</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="ambience" role="listitem">
-        <img src="images/placeholder.svg" alt="Restaurant Interior" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">The Ember Room</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="food" role="listitem">
-        <img src="images/placeholder.svg" alt="Wood-Fired BBQ" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">The Open Fire Kitchen</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <div class="gallery-item gallery-item-full gallery-item-full--tall" data-category="cocktails" role="listitem">
-        <img src="images/placeholder.svg" alt="Craft Cocktails" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">The Bar at Ember</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="events" role="listitem">
-        <img src="images/placeholder.svg" alt="Private Dining Event" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Private Dining Events</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="food" role="listitem">
-        <img src="images/placeholder.svg" alt="Fine Dining Setup" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Table Setting</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="events" role="listitem">
-        <img src="images/placeholder.svg" alt="Corporate Events" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Corporate Dinners</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="ambience" role="listitem">
-        <img src="images/placeholder.svg" alt="Restaurant Exterior" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Courtyard Terrace</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="cocktails" role="listitem">
-        <img src="images/placeholder.svg" alt="Bar Area" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">The Cocktail Lab</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <!-- Anniversary Celebrations -->
-      <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="events" role="listitem">
-        <img src="images/placeholder.svg" alt="Anniversary Celebrations" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Anniversary Celebrations</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <!-- Birthday Celebrations -->
-      <div class="gallery-item gallery-item-full gallery-item-full--tall" data-category="events" role="listitem">
-        <img src="images/placeholder.svg" alt="Birthday Celebrations" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Birthday Celebrations</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <!-- Success Parties -->
-      <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="events" role="listitem">
-        <img src="images/placeholder.svg" alt="Corporate Success Parties" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Corporate Success Parties</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <!-- Wood-Fired Rosemary Brie -->
-      <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="food" role="listitem">
-        <img src="images/placeholder.svg" alt="Wood-Fired Rosemary Brie" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Wood-Fired Rosemary Brie</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <!-- Cedar Plank Salmon -->
-      <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="food" role="listitem">
-        <img src="images/placeholder.svg" alt="Cedar Plank Salmon" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Cedar Plank Salmon</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <!-- Fireside Hearth Seating -->
-      <div class="gallery-item gallery-item-full gallery-item-full--tall" data-category="ambience" role="listitem">
-        <img src="images/placeholder.svg" alt="Fireside Hearth Seating" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Fireside Hearth Seating</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-      <!-- Garden Terrace Ambience -->
-      <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="ambience" role="listitem">
-        <img src="images/placeholder.svg" alt="Garden Terrace Ambience" loading="lazy" />
-        <div class="g-overlay"><span class="g-overlay-text">Garden Terrace Ambience</span></div>
-        <div class="g-zoom">🔍</div>
-      </div>
-
-    </div>
-
-    <div class="text-center" style="margin-top: var(--space-12);">
-      <p style="margin-bottom: var(--space-5); color: var(--clr-muted); font-size: var(--fs-sm);">Follow us on Instagram <strong style="color: var(--clr-primary);">@ember_and_oak</strong> for daily food stories</p>
-      <a href="reservations.html" class="btn btn-primary btn-lg">🍽️ Reserve Your Table</a>
     </div>
   </div>
-</section>
-
-<!-- Lightbox -->
-<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
-  <button id="lightbox-close" class="lightbox-close" aria-label="Close">✕</button>
-  <button id="lightbox-prev"  class="lightbox-prev"  aria-label="Previous image">←</button>
-  <img id="lightbox-img" class="lightbox-img" src="" alt="" />
-  <button id="lightbox-next"  class="lightbox-next"  aria-label="Next image">→</button>
-</div>
-
-<footer class="footer" role="contentinfo">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand-name">Ember <span>&</span> Oak</div>
-        <p class="footer-brand-desc">Premium wood-fired cuisine and craft cocktails in the heart of the city.</p>
-        <div class="footer-social"><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">👤</a><a href="#" class="social-btn">🐦</a></div>
+  <nav id="navbar" class="navbar scrolled" role="navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><span class="nav-logo-name">Ember <span>&</span> Oak</span><span
+          class="nav-logo-tagline">Wood-Fired · Craft Cocktails</span></a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a><a href="menu.html" class="nav-link">Menu</a>
+        <a href="about.html" class="nav-link">About</a><a href="gallery.html" class="nav-link active">Gallery</a>
+        <a href="contact.html" class="nav-link">Contact</a>
       </div>
-      <div>
-        <h3 class="footer-heading">Quick Links</h3>
-        <nav class="footer-links">
-          <a href="index.html" class="footer-link">🏠 Home</a><a href="menu.html" class="footer-link">📋 Menu</a>
-          <a href="about.html" class="footer-link">👨‍🍳 About</a><a href="gallery.html" class="footer-link">🖼️ Gallery</a>
-          <a href="reservations.html" class="footer-link">🍽️ Reservations</a><a href="contact.html" class="footer-link">📍 Contact</a>
-        </nav>
+      <a href="reservations.html" class="btn btn-primary btn-sm nav-cta">Reserve a Table</a>
+      <button id="nav-hamburger" class="nav-hamburger"
+        aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div id="nav-drawer" class="nav-drawer">
+    <a href="index.html" class="nav-link">Home</a><a href="menu.html" class="nav-link">Menu</a>
+    <a href="about.html" class="nav-link">About</a><a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="reservations.html" class="btn btn-primary btn-lg" style="margin-top:1rem">Reserve a Table</a>
+  </div>
+
+  <div class="page-hero">
+    <div class="container text-center reveal">
+      <span class="section-label">A Feast for the Eyes</span>
+      <h1 class="section-title" style="font-size: var(--fs-4xl);">Gallery</h1>
+      <p class="section-subtitle" style="margin-inline:auto; margin-top: var(--space-4);">Every frame tells a story of
+        fire, craft, and atmosphere. This is Ember & Oak through a lens.</p>
+    </div>
+  </div>
+
+  <section class="section" id="gallery-section">
+    <div class="container">
+      <!-- Filter -->
+      <div class="gallery-filter" role="group" aria-label="Gallery filters">
+        <button class="gallery-filter-btn active" data-filter="all" id="gf-all">All</button>
+        <button class="gallery-filter-btn" data-filter="food" id="gf-food">🍽️ Food</button>
+        <button class="gallery-filter-btn" data-filter="cocktails" id="gf-cocktails">🍹 Cocktails</button>
+        <button class="gallery-filter-btn" data-filter="ambience" id="gf-ambience">✨ Ambience</button>
+        <button class="gallery-filter-btn" data-filter="events" id="gf-events">🎉 Events</button>
       </div>
-      <div>
-        <h3 class="footer-heading">Contact</h3>
-        <div class="footer-links">
-          <span class="footer-link">📍 12 Oak Lane, Bandra West, Mumbai</span>
-          <a href="tel:+919876543210" class="footer-link">📞 +91 98765 43210</a>
-          <a href="mailto:hello@emberandoak.com" class="footer-link">✉️ hello@emberandoak.com</a>
+
+      <!-- Gallery Grid -->
+      <div class="gallery-grid-full" id="gallery-grid" role="list">
+
+        <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="food" role="listitem">
+          <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=900&q=80" alt="Oak-Smoked Ribeye"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Oak-Smoked Ribeye</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <div class="gallery-item gallery-item-full gallery-item-full--tall" data-category="ambience" role="listitem">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80" alt="Restaurant Ambience"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Intimate Dining</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="cocktails" role="listitem">
+          <img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=900&q=80" alt="Smoke Old Fashioned"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Smoke & Ember Old Fashioned</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="food" role="listitem">
+          <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=900&q=80"
+            alt="Molten Chocolate Lava Cake" loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Molten Chocolate Lava Cake</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="ambience" role="listitem">
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80" alt="Restaurant Interior"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">The Ember Room</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="food" role="listitem">
+          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=900&q=80" alt="Wood-Fired BBQ"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">The Open Fire Kitchen</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <div class="gallery-item gallery-item-full gallery-item-full--tall" data-category="cocktails" role="listitem">
+          <img src="https://images.unsplash.com/photo-1574096079513-d8259312b785?w=600&q=80" alt="Craft Cocktails"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">The Bar at Ember</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="events" role="listitem">
+          <img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=600&q=80" alt="Private Dining Event"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Private Dining Events</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="food" role="listitem">
+          <img src="https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=600&q=80" alt="Fine Dining Setup"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Table Setting</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="events" role="listitem">
+          <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=900&q=80" alt="Corporate Events"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Corporate Dinners</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="ambience" role="listitem">
+          <img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=900&q=80" alt="Restaurant Exterior"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Courtyard Terrace</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="cocktails" role="listitem">
+          <img src="https://images.unsplash.com/photo-1560624052-449f5ddf0c31?w=900&q=80" alt="Bar Area"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">The Cocktail Lab</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <!-- Anniversary Celebrations -->
+        <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="events" role="listitem">
+          <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=900&q=80"
+            alt="Anniversary Celebrations" loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Anniversary Celebrations</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <!-- Birthday Celebrations -->
+        <div class="gallery-item gallery-item-full gallery-item-full--tall" data-category="events" role="listitem">
+          <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=900&q=80" alt="Birthday Celebrations"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Birthday Celebrations</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <!-- Success Parties -->
+        <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="events" role="listitem">
+          <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=900&q=80"
+            alt="Corporate Success Parties" loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Corporate Success Parties</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <!-- Wood-Fired Rosemary Brie -->
+        <div class="gallery-item gallery-item-full gallery-item-full--square" data-category="food" role="listitem">
+          <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=900&q=80"
+            alt="Wood-Fired Rosemary Brie" loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Wood-Fired Rosemary Brie</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <!-- Cedar Plank Salmon -->
+        <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="food" role="listitem">
+          <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=900&q=80" alt="Cedar Plank Salmon"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Cedar Plank Salmon</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <!-- Fireside Hearth Seating -->
+        <div class="gallery-item gallery-item-full gallery-item-full--tall" data-category="ambience" role="listitem">
+          <img src="https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=900&q=80" alt="Fireside Hearth Seating"
+            loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Fireside Hearth Seating</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+        <!-- Garden Terrace Ambience -->
+        <div class="gallery-item gallery-item-full gallery-item-full--wide" data-category="ambience" role="listitem">
+          <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=900&q=80"
+            alt="Garden Terrace Ambience" loading="lazy" />
+          <div class="g-overlay"><span class="g-overlay-text">Garden Terrace Ambience</span></div>
+          <div class="g-zoom">🔍</div>
+        </div>
+
+      </div>
+
+      <div class="text-center" style="margin-top: var(--space-12);">
+        <p style="margin-bottom: var(--space-5); color: var(--clr-muted); font-size: var(--fs-sm);">Follow us on
+          Instagram <strong style="color: var(--clr-primary);">@ember_and_oak</strong> for daily food stories</p>
+        <a href="reservations.html" class="btn btn-primary btn-lg">🍽️ Reserve Your Table</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button id="lightbox-close" class="lightbox-close" aria-label="Close">✕</button>
+    <button id="lightbox-prev" class="lightbox-prev" aria-label="Previous image">←</button>
+    <img id="lightbox-img" class="lightbox-img" src="" alt="" />
+    <button id="lightbox-next" class="lightbox-next" aria-label="Next image">→</button>
+  </div>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name">Ember <span>&</span> Oak</div>
+          <p class="footer-brand-desc">Premium wood-fired cuisine and craft cocktails in the heart of the city.</p>
+          <div class="footer-social"><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">👤</a><a
+              href="#" class="social-btn">🐦</a></div>
+        </div>
+        <div>
+          <h3 class="footer-heading">Quick Links</h3>
+          <nav class="footer-links">
+            <a href="index.html" class="footer-link">🏠 Home</a><a href="menu.html" class="footer-link">📋 Menu</a>
+            <a href="about.html" class="footer-link">👨‍🍳 About</a><a href="gallery.html" class="footer-link">🖼️
+              Gallery</a>
+            <a href="reservations.html" class="footer-link">🍽️ Reservations</a><a href="contact.html"
+              class="footer-link">📍 Contact</a>
+          </nav>
+        </div>
+        <div>
+          <h3 class="footer-heading">Contact</h3>
+          <div class="footer-links">
+            <span class="footer-link">📍 12 Oak Lane, Bandra West, Mumbai</span>
+            <a href="tel:+919876543210" class="footer-link">📞 +91 98765 43210</a>
+            <a href="mailto:hello@emberandoak.com" class="footer-link">✉️ hello@emberandoak.com</a>
+          </div>
+        </div>
+        <div>
+          <h3 class="footer-heading">Hours</h3>
+          <div class="footer-hours-item"><span class="day">Tue – Fri</span><span>12:00 – 23:00</span></div>
+          <div class="footer-hours-item"><span class="day">Sat</span><span>11:00 – 23:30</span></div>
+          <div class="footer-hours-item"><span class="day">Sun</span><span>11:00 – 22:00</span></div>
+          <div class="footer-hours-item"><span class="day">Mon</span><span style="color:#ff8080">Closed</span></div>
         </div>
       </div>
-      <div>
-        <h3 class="footer-heading">Hours</h3>
-        <div class="footer-hours-item"><span class="day">Tue – Fri</span><span>12:00 – 23:00</span></div>
-        <div class="footer-hours-item"><span class="day">Sat</span><span>11:00 – 23:30</span></div>
-        <div class="footer-hours-item"><span class="day">Sun</span><span>11:00 – 22:00</span></div>
-        <div class="footer-hours-item"><span class="day">Mon</span><span style="color:#ff8080">Closed</span></div>
+      <div class="footer-bottom">
+        <span>© 2026 Ember & Oak. All rights reserved.</span>
+        <div class="footer-bottom-links"><a href="#" class="footer-bottom-link">Privacy</a><a href="#"
+            class="footer-bottom-link">Terms</a></div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Ember & Oak. All rights reserved.</span>
-      <div class="footer-bottom-links"><a href="#" class="footer-bottom-link">Privacy</a><a href="#" class="footer-bottom-link">Terms</a></div>
-    </div>
-  </div>
-</footer>
-<a href="reservations.html" class="float-reserve btn btn-primary" id="float-reserve">🍽️ Reserve</a>
-<button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
-<script src="js/main.js"></script>
-<script src="js/gallery.js"></script>
+  </footer>
+  <a href="reservations.html" class="float-reserve btn btn-primary" id="float-reserve">🍽️ Reserve</a>
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
+  <script src="js/main.js"></script>
+  <script src="js/gallery.js"></script>
 </body>
+
 </html>

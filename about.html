@@ -1,297 +1,447 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About — Ember & Oak</title>
-  <meta name="description" content="The story of Ember & Oak — from Chef Marco Rossi's humble beginnings to becoming the city's most celebrated wood-fired restaurant." />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
+  <meta name="description"
+    content="The story of Ember & Oak — from Chef Marco Rossi's humble beginnings to becoming the city's most celebrated wood-fired restaurant." />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/animations.css" />
   <link rel="stylesheet" href="css/responsive.css" />
   <style>
-    .timeline { position: relative; padding-left: var(--space-10); }
-    .timeline::before { content:''; position:absolute; left:20px; top:0; bottom:0; width:2px; background: linear-gradient(180deg, var(--clr-primary), transparent); }
-    .timeline-item { position:relative; margin-bottom: var(--space-12); }
-    .timeline-dot { position:absolute; left: calc(-1 * var(--space-10) + 12px); top:4px; width:18px; height:18px; border-radius:50%; background: var(--clr-primary); border:3px solid var(--clr-bg); box-shadow: 0 0 0 4px var(--clr-primary-glow); }
-    .timeline-year { font-size: var(--fs-xs); font-weight:700; letter-spacing:0.15em; color: var(--clr-primary); text-transform:uppercase; margin-bottom: var(--space-2); }
-    .timeline-title { font-family: var(--font-heading); font-size: var(--fs-xl); font-weight:700; margin-bottom: var(--space-3); }
-    .timeline-text { font-size: var(--fs-sm); color: var(--clr-muted); line-height:1.8; }
-    .values-grid { display:grid; grid-template-columns: repeat(3,1fr); gap: var(--space-6); }
-    .value-card { background: var(--clr-surface); border:1px solid var(--clr-border); border-radius: var(--radius-lg); padding: var(--space-8); text-align:center; transition: all var(--transition); }
-    .value-card:hover { border-color: var(--clr-primary); transform: translateY(-4px); box-shadow: var(--shadow-glow); }
-    .value-icon { font-size:2.5rem; margin-bottom: var(--space-4); display:block; }
-    .value-title { font-family: var(--font-heading); font-size: var(--fs-xl); margin-bottom: var(--space-3); }
-    .value-desc { font-size: var(--fs-sm); color: var(--clr-muted); line-height:1.7; }
-    .press-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: var(--space-5); }
-    @media(max-width:1024px){ .values-grid{grid-template-columns:repeat(2,1fr);} .press-grid{grid-template-columns:repeat(2,1fr);} }
-    @media(max-width:600px){ .values-grid{grid-template-columns:1fr;} .press-grid{grid-template-columns:1fr;} }
+    .timeline {
+      position: relative;
+      padding-left: var(--space-10);
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--clr-primary), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: var(--space-12);
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: calc(-1 * var(--space-10) + 12px);
+      top: 4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--clr-primary);
+      border: 3px solid var(--clr-bg);
+      box-shadow: 0 0 0 4px var(--clr-primary-glow);
+    }
+
+    .timeline-year {
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--clr-primary);
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+
+    .timeline-title {
+      font-family: var(--font-heading);
+      font-size: var(--fs-xl);
+      font-weight: 700;
+      margin-bottom: var(--space-3);
+    }
+
+    .timeline-text {
+      font-size: var(--fs-sm);
+      color: var(--clr-muted);
+      line-height: 1.8;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+
+    .value-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      text-align: center;
+      transition: all var(--transition);
+    }
+
+    .value-card:hover {
+      border-color: var(--clr-primary);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .value-icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-4);
+      display: block;
+    }
+
+    .value-title {
+      font-family: var(--font-heading);
+      font-size: var(--fs-xl);
+      margin-bottom: var(--space-3);
+    }
+
+    .value-desc {
+      font-size: var(--fs-sm);
+      color: var(--clr-muted);
+      line-height: 1.7;
+    }
+
+    .press-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-5);
+    }
+
+    @media(max-width:1024px) {
+      .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .press-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:600px) {
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .press-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
+
 <body>
-<div id="page-loader" class="page-loader">
-  <div style="text-align:center">
-    <div class="loader-logo">Ember <span>&</span> Oak</div>
-    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-  </div>
-</div>
-<nav id="navbar" class="navbar scrolled" role="navigation">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo"><span class="nav-logo-name">Ember <span>&</span> Oak</span><span class="nav-logo-tagline">Wood-Fired · Craft Cocktails</span></a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link">Home</a><a href="menu.html" class="nav-link">Menu</a>
-      <a href="about.html" class="nav-link active">About</a><a href="gallery.html" class="nav-link">Gallery</a>
-      <a href="contact.html" class="nav-link">Contact</a>
+  <div id="page-loader" class="page-loader">
+    <div style="text-align:center">
+      <div class="loader-logo">Ember <span>&</span> Oak</div>
+      <div class="loader-bar">
+        <div class="loader-bar-fill"></div>
+      </div>
     </div>
-    <a href="reservations.html" class="btn btn-primary btn-sm nav-cta">Reserve a Table</a>
-    <button id="nav-hamburger" class="nav-hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
   </div>
-</nav>
-<div id="nav-drawer" class="nav-drawer">
-  <a href="index.html" class="nav-link">Home</a><a href="menu.html" class="nav-link">Menu</a>
-  <a href="about.html" class="nav-link">About</a><a href="gallery.html" class="nav-link">Gallery</a>
-  <a href="contact.html" class="nav-link">Contact</a>
-  <a href="reservations.html" class="btn btn-primary btn-lg" style="margin-top:1rem">Reserve a Table</a>
-</div>
+  <nav id="navbar" class="navbar scrolled" role="navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><span class="nav-logo-name">Ember <span>&</span> Oak</span><span
+          class="nav-logo-tagline">Wood-Fired · Craft Cocktails</span></a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a><a href="menu.html" class="nav-link">Menu</a>
+        <a href="about.html" class="nav-link active">About</a><a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <a href="reservations.html" class="btn btn-primary btn-sm nav-cta">Reserve a Table</a>
+      <button id="nav-hamburger" class="nav-hamburger"
+        aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div id="nav-drawer" class="nav-drawer">
+    <a href="index.html" class="nav-link">Home</a><a href="menu.html" class="nav-link">Menu</a>
+    <a href="about.html" class="nav-link">About</a><a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="reservations.html" class="btn btn-primary btn-lg" style="margin-top:1rem">Reserve a Table</a>
+  </div>
 
-<!-- Page Hero -->
-<div class="page-hero">
-  <div class="container text-center reveal">
-    <span class="section-label">Passion Meets Purpose</span>
-    <h1 class="section-title" style="font-size: var(--fs-4xl);">About Us</h1>
-    <p class="section-subtitle" style="margin-inline:auto; margin-top: var(--space-4);">From a small courtyard kitchen to the city's most celebrated dining destination — this is the Ember & Oak journey.</p>
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="container text-center reveal">
+      <span class="section-label">Passion Meets Purpose</span>
+      <h1 class="section-title" style="font-size: var(--fs-4xl);">About Us</h1>
+      <p class="section-subtitle" style="margin-inline:auto; margin-top: var(--space-4);">From a small courtyard kitchen
+        to the city's most celebrated dining destination — this is the Ember & Oak journey.</p>
+    </div>
   </div>
-</div>
 
-<!-- Story Intro -->
-<section class="section" id="story-intro">
-  <div class="container">
-    <div class="split-section">
-      <div class="split-img-wrap reveal-left">
-        <img src="images/placeholder.svg" alt="Head Chef Marco Rossi" class="split-img" loading="lazy" />
-        <div class="split-img-badge">Est. 2018 · Mumbai</div>
-      </div>
-      <div class="reveal-right">
-        <span class="section-label">The Beginning</span>
-        <h2 class="section-title">A Chef's Dream, Lit by Fire</h2>
-        <p style="margin-bottom: var(--space-5);">Chef Marco Rossi grew up watching his grandmother cook over a wood fire in rural Goa. That primal connection between fire, food, and family became the foundation of everything he would create. After training in Michelin-starred kitchens across Europe — London, Barcelona, and Lyon — Marco returned to India with one mission: to bring world-class wood-fired cuisine to Mumbai.</p>
-        <p style="margin-bottom: var(--space-5);">In 2018, with little more than a dream, a secondhand wood-fired oven, and a small lease in Bandra, Ember & Oak was born. The first night had just 14 covers. Today, we seat 90 guests nightly and have a 3-week waiting list on weekends.</p>
-        <p>What has never changed is the ethos: respect the ingredient, master the fire, and let flavour do the talking.</p>
+  <!-- Story Intro -->
+  <section class="section" id="story-intro">
+    <div class="container">
+      <div class="split-section">
+        <div class="split-img-wrap reveal-left">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80" alt="Head Chef Marco Rossi"
+            class="split-img" loading="lazy" />
+          <div class="split-img-badge">Est. 2018 · Mumbai</div>
+        </div>
+        <div class="reveal-right">
+          <span class="section-label">The Beginning</span>
+          <h2 class="section-title">A Chef's Dream, Lit by Fire</h2>
+          <p style="margin-bottom: var(--space-5);">Chef Marco Rossi grew up watching his grandmother cook over a wood
+            fire in rural Goa. That primal connection between fire, food, and family became the foundation of everything
+            he would create. After training in Michelin-starred kitchens across Europe — London, Barcelona, and Lyon —
+            Marco returned to India with one mission: to bring world-class wood-fired cuisine to Mumbai.</p>
+          <p style="margin-bottom: var(--space-5);">In 2018, with little more than a dream, a secondhand wood-fired
+            oven, and a small lease in Bandra, Ember & Oak was born. The first night had just 14 covers. Today, we seat
+            90 guests nightly and have a 3-week waiting list on weekends.</p>
+          <p>What has never changed is the ethos: respect the ingredient, master the fire, and let flavour do the
+            talking.</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Timeline -->
-<section class="section" style="background: var(--clr-surface); border-top:1px solid var(--clr-border);" id="timeline">
-  <div class="container">
-    <div class="text-center reveal" style="margin-bottom: var(--space-12);">
-      <span class="section-label">The Journey</span>
-      <h2 class="section-title">Milestones That Shaped Us</h2>
-    </div>
-    <div style="max-width:680px; margin:0 auto;">
-      <div class="timeline">
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2018</div>
-          <div class="timeline-title">Ember & Oak Opens Its Doors</div>
-          <p class="timeline-text">We opened with a 14-seat courtyard restaurant and a single wood-fired oven. Chef Marco's philosophy was radical for the city — minimal intervention, maximum fire flavour. The first weekend was fully booked within 3 days.</p>
-        </div>
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2019</div>
-          <div class="timeline-title">Craft Cocktail Bar Launched</div>
-          <p class="timeline-text">Our bar programme launched with Head Mixologist Anika Singh bringing smoke-infused cocktails to life. The Smoke & Ember Old Fashioned debuted here and became an overnight sensation, featured in Condé Nast Traveller India.</p>
-        </div>
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2020</div>
-          <div class="timeline-title">Pivoting Through the Pandemic</div>
-          <p class="timeline-text">Like all restaurants, 2020 was our hardest year. We pivoted to premium home delivery with custom packaging, and launched Ember at Home — a DIY wood-fired kit. Our loyal community kept us alive.</p>
-        </div>
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2022</div>
-          <div class="timeline-title">Forbes India 30 Under 30 — Chef Marco</div>
-          <p class="timeline-text">Chef Marco was recognised in Forbes India's 30 Under 30 in Food & Beverage. We expanded to a 90-seat indoor-outdoor space with a private dining room for corporate events and celebrations.</p>
-        </div>
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2024</div>
-          <div class="timeline-title">Best Restaurant — Time Out Mumbai Awards</div>
-          <p class="timeline-text">Ember & Oak was named Best Restaurant 2024 by Time Out Mumbai, with special recognition for Best Bar Programme. We launched our seasonal tasting menu — a 7-course wood-fired journey.</p>
-        </div>
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2026</div>
-          <div class="timeline-title">The Story Continues…</div>
-          <p class="timeline-text">With a second location planned for Delhi, a cookbook in development, and a master-class series launching, Ember & Oak's best chapters are still being written.</p>
+  <!-- Timeline -->
+  <section class="section" style="background: var(--clr-surface); border-top:1px solid var(--clr-border);"
+    id="timeline">
+    <div class="container">
+      <div class="text-center reveal" style="margin-bottom: var(--space-12);">
+        <span class="section-label">The Journey</span>
+        <h2 class="section-title">Milestones That Shaped Us</h2>
+      </div>
+      <div style="max-width:680px; margin:0 auto;">
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2018</div>
+            <div class="timeline-title">Ember & Oak Opens Its Doors</div>
+            <p class="timeline-text">We opened with a 14-seat courtyard restaurant and a single wood-fired oven. Chef
+              Marco's philosophy was radical for the city — minimal intervention, maximum fire flavour. The first
+              weekend was fully booked within 3 days.</p>
+          </div>
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2019</div>
+            <div class="timeline-title">Craft Cocktail Bar Launched</div>
+            <p class="timeline-text">Our bar programme launched with Head Mixologist Anika Singh bringing smoke-infused
+              cocktails to life. The Smoke & Ember Old Fashioned debuted here and became an overnight sensation,
+              featured in Condé Nast Traveller India.</p>
+          </div>
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2020</div>
+            <div class="timeline-title">Pivoting Through the Pandemic</div>
+            <p class="timeline-text">Like all restaurants, 2020 was our hardest year. We pivoted to premium home
+              delivery with custom packaging, and launched Ember at Home — a DIY wood-fired kit. Our loyal community
+              kept us alive.</p>
+          </div>
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2022</div>
+            <div class="timeline-title">Forbes India 30 Under 30 — Chef Marco</div>
+            <p class="timeline-text">Chef Marco was recognised in Forbes India's 30 Under 30 in Food & Beverage. We
+              expanded to a 90-seat indoor-outdoor space with a private dining room for corporate events and
+              celebrations.</p>
+          </div>
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2024</div>
+            <div class="timeline-title">Best Restaurant — Time Out Mumbai Awards</div>
+            <p class="timeline-text">Ember & Oak was named Best Restaurant 2024 by Time Out Mumbai, with special
+              recognition for Best Bar Programme. We launched our seasonal tasting menu — a 7-course wood-fired journey.
+            </p>
+          </div>
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2026</div>
+            <div class="timeline-title">The Story Continues…</div>
+            <p class="timeline-text">With a second location planned for Delhi, a cookbook in development, and a
+              master-class series launching, Ember & Oak's best chapters are still being written.</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Values -->
-<section class="section" id="values">
-  <div class="container">
-    <div class="text-center reveal" style="margin-bottom: var(--space-12);">
-      <span class="section-label">What We Stand For</span>
-      <h2 class="section-title">Our Core Values</h2>
-    </div>
-    <div class="values-grid stagger">
-      <div class="value-card">
-        <span class="value-icon">🔥</span>
-        <div class="value-title">The Fire First</div>
-        <p class="value-desc">Every dish passes through our wood-fired oven. It's not a technique, it's a philosophy — fire transforms ingredients into something greater.</p>
+  <!-- Values -->
+  <section class="section" id="values">
+    <div class="container">
+      <div class="text-center reveal" style="margin-bottom: var(--space-12);">
+        <span class="section-label">What We Stand For</span>
+        <h2 class="section-title">Our Core Values</h2>
       </div>
-      <div class="value-card">
-        <span class="value-icon">🌿</span>
-        <div class="value-title">Locally Sourced</div>
-        <p class="value-desc">We partner with 14 local farms, fishermen, and dairies within 200km of Mumbai. Fresh, seasonal, and traceable — every single ingredient.</p>
-      </div>
-      <div class="value-card">
-        <span class="value-icon">🤝</span>
-        <div class="value-title">Community First</div>
-        <p class="value-desc">We employ locally, train in-house, and give 1% of revenue to Mumbai food banks. A restaurant that gives back is a restaurant worth building.</p>
-      </div>
-      <div class="value-card">
-        <span class="value-icon">✨</span>
-        <div class="value-title">Zero Waste Kitchen</div>
-        <p class="value-desc">Our kitchen composts 95% of food waste, uses seasonal menus to minimise waste, and all packaging is 100% biodegradable.</p>
-      </div>
-      <div class="value-card">
-        <span class="value-icon">👨‍🍳</span>
-        <div class="value-title">Craft Over Scale</div>
-        <p class="value-desc">We will never franchise or cut corners. Every sauce is made from scratch, every cocktail shaken by hand. Small is intentional.</p>
-      </div>
-      <div class="value-card">
-        <span class="value-icon">💛</span>
-        <div class="value-title">Hospitality as Art</div>
-        <p class="value-desc">We train every team member to remember guest names, preferences, and occasions. Hospitality isn't service — it's making people feel at home.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Team -->
-<section class="section" style="background: var(--clr-surface); border-top:1px solid var(--clr-border);" id="team">
-  <div class="container">
-    <div class="text-center reveal" style="margin-bottom: var(--space-12);">
-      <span class="section-label">The People Behind the Fire</span>
-      <h2 class="section-title">Meet Our Team</h2>
-    </div>
-    <div class="cards-grid-3 stagger">
-      <div class="team-card">
-        <img src="images/placeholder.svg" alt="Chef Marco Rossi" class="team-card-img" loading="lazy" />
-        <div class="team-card-body">
-          <div class="team-card-name">Marco Rossi</div>
-          <div class="team-card-role">Founder & Head Chef</div>
-          <p class="team-card-bio">Trained in London, Barcelona & Lyon. 18 years of culinary experience. Forbes 30 Under 30. Obsessed with fire, flavour, and community.</p>
+      <div class="values-grid stagger">
+        <div class="value-card">
+          <span class="value-icon">🔥</span>
+          <div class="value-title">The Fire First</div>
+          <p class="value-desc">Every dish passes through our wood-fired oven. It's not a technique, it's a philosophy —
+            fire transforms ingredients into something greater.</p>
         </div>
-      </div>
-      <div class="team-card">
-        <div style="background: linear-gradient(135deg,#2a1f0f,#1a1209); aspect-ratio:3/4; display:flex; align-items:center; justify-content:center; font-size:5rem;">🍹</div>
-        <div class="team-card-body">
-          <div class="team-card-name">Anika Singh</div>
-          <div class="team-card-role">Head Mixologist</div>
-          <p class="team-card-bio">Former brand ambassador for a premium Scotch label. Creator of the legendary Smoke & Ember Old Fashioned. Cocktails are her canvas.</p>
+        <div class="value-card">
+          <span class="value-icon">🌿</span>
+          <div class="value-title">Locally Sourced</div>
+          <p class="value-desc">We partner with 14 local farms, fishermen, and dairies within 200km of Mumbai. Fresh,
+            seasonal, and traceable — every single ingredient.</p>
         </div>
-      </div>
-      <div class="team-card">
-        <div style="background: linear-gradient(135deg,#0f1a2a,#091220); aspect-ratio:3/4; display:flex; align-items:center; justify-content:center; font-size:5rem;">🍽️</div>
-        <div class="team-card-body">
-          <div class="team-card-name">Priya Nair</div>
-          <div class="team-card-role">General Manager</div>
-          <p class="team-card-bio">15 years in luxury hospitality across the Taj Group and ITC Hotels. Priya's warmth sets the tone for every guest experience at Ember & Oak.</p>
+        <div class="value-card">
+          <span class="value-icon">🤝</span>
+          <div class="value-title">Community First</div>
+          <p class="value-desc">We employ locally, train in-house, and give 1% of revenue to Mumbai food banks. A
+            restaurant that gives back is a restaurant worth building.</p>
+        </div>
+        <div class="value-card">
+          <span class="value-icon">✨</span>
+          <div class="value-title">Zero Waste Kitchen</div>
+          <p class="value-desc">Our kitchen composts 95% of food waste, uses seasonal menus to minimise waste, and all
+            packaging is 100% biodegradable.</p>
+        </div>
+        <div class="value-card">
+          <span class="value-icon">👨‍🍳</span>
+          <div class="value-title">Craft Over Scale</div>
+          <p class="value-desc">We will never franchise or cut corners. Every sauce is made from scratch, every cocktail
+            shaken by hand. Small is intentional.</p>
+        </div>
+        <div class="value-card">
+          <span class="value-icon">💛</span>
+          <div class="value-title">Hospitality as Art</div>
+          <p class="value-desc">We train every team member to remember guest names, preferences, and occasions.
+            Hospitality isn't service — it's making people feel at home.</p>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Press Awards -->
-<section class="section" id="press">
-  <div class="container">
-    <div class="text-center reveal" style="margin-bottom: var(--space-12);">
-      <span class="section-label">Recognition</span>
-      <h2 class="section-title">Press & Awards</h2>
-    </div>
-    <div class="press-grid stagger">
-      <div class="press-card">
-        <div class="press-card-year">2024</div>
-        <div class="press-card-award">Best Restaurant</div>
-        <div class="press-card-pub">Time Out Mumbai Awards</div>
+  <!-- Team -->
+  <section class="section" style="background: var(--clr-surface); border-top:1px solid var(--clr-border);" id="team">
+    <div class="container">
+      <div class="text-center reveal" style="margin-bottom: var(--space-12);">
+        <span class="section-label">The People Behind the Fire</span>
+        <h2 class="section-title">Meet Our Team</h2>
       </div>
-      <div class="press-card">
-        <div class="press-card-year">2023</div>
-        <div class="press-card-award">Best Bar Programme</div>
-        <div class="press-card-pub">India Food Awards</div>
-      </div>
-      <div class="press-card">
-        <div class="press-card-year">2022</div>
-        <div class="press-card-award">Forbes 30 Under 30</div>
-        <div class="press-card-pub">Food & Beverage Category</div>
-      </div>
-      <div class="press-card">
-        <div class="press-card-year">2019</div>
-        <div class="press-card-award">Best New Restaurant</div>
-        <div class="press-card-pub">Condé Nast Traveller India</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-banner section--sm" id="about-cta">
-  <div class="container text-center reveal">
-    <span class="accent-text" style="display:block; margin-bottom: var(--space-3);">Experience the Story</span>
-    <h2 class="section-title">Come Taste Our Passion</h2>
-    <p class="section-subtitle" style="margin: var(--space-4) auto var(--space-8);">Every story deserves a great meal. Reserve your table and become part of ours.</p>
-    <a href="reservations.html" class="btn btn-primary btn-lg">🍽️ Reserve a Table</a>
-  </div>
-</section>
-
-<footer class="footer" role="contentinfo">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand-name">Ember <span>&</span> Oak</div>
-        <p class="footer-brand-desc">Premium wood-fired cuisine and craft cocktails in the heart of the city.</p>
-        <div class="footer-social"><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">👤</a><a href="#" class="social-btn">🐦</a></div>
-      </div>
-      <div>
-        <h3 class="footer-heading">Quick Links</h3>
-        <nav class="footer-links">
-          <a href="index.html" class="footer-link">🏠 Home</a><a href="menu.html" class="footer-link">📋 Menu</a>
-          <a href="about.html" class="footer-link">👨‍🍳 About</a><a href="gallery.html" class="footer-link">🖼️ Gallery</a>
-          <a href="reservations.html" class="footer-link">🍽️ Reservations</a><a href="contact.html" class="footer-link">📍 Contact</a>
-        </nav>
-      </div>
-      <div>
-        <h3 class="footer-heading">Contact</h3>
-        <div class="footer-links">
-          <span class="footer-link">📍 12 Oak Lane, Bandra West, Mumbai</span>
-          <a href="tel:+919876543210" class="footer-link">📞 +91 98765 43210</a>
-          <a href="mailto:hello@emberandoak.com" class="footer-link">✉️ hello@emberandoak.com</a>
+      <div class="cards-grid-3 stagger">
+        <div class="team-card">
+          <img src="https://images.unsplash.com/photo-1583394293214-0b3e7b7b5e7d?w=600&q=80" alt="Chef Marco Rossi"
+            class="team-card-img" loading="lazy" />
+          <div class="team-card-body">
+            <div class="team-card-name">Marco Rossi</div>
+            <div class="team-card-role">Founder & Head Chef</div>
+            <p class="team-card-bio">Trained in London, Barcelona & Lyon. 18 years of culinary experience. Forbes 30
+              Under 30. Obsessed with fire, flavour, and community.</p>
+          </div>
+        </div>
+        <div class="team-card">
+          <div
+            style="background: linear-gradient(135deg,#2a1f0f,#1a1209); aspect-ratio:3/4; display:flex; align-items:center; justify-content:center; font-size:5rem;">
+            🍹</div>
+          <div class="team-card-body">
+            <div class="team-card-name">Anika Singh</div>
+            <div class="team-card-role">Head Mixologist</div>
+            <p class="team-card-bio">Former brand ambassador for a premium Scotch label. Creator of the legendary Smoke
+              & Ember Old Fashioned. Cocktails are her canvas.</p>
+          </div>
+        </div>
+        <div class="team-card">
+          <div
+            style="background: linear-gradient(135deg,#0f1a2a,#091220); aspect-ratio:3/4; display:flex; align-items:center; justify-content:center; font-size:5rem;">
+            🍽️</div>
+          <div class="team-card-body">
+            <div class="team-card-name">Priya Nair</div>
+            <div class="team-card-role">General Manager</div>
+            <p class="team-card-bio">15 years in luxury hospitality across the Taj Group and ITC Hotels. Priya's warmth
+              sets the tone for every guest experience at Ember & Oak.</p>
+          </div>
         </div>
       </div>
-      <div>
-        <h3 class="footer-heading">Hours</h3>
-        <div class="footer-hours-item"><span class="day">Tue – Fri</span><span>12:00 – 23:00</span></div>
-        <div class="footer-hours-item"><span class="day">Sat</span><span>11:00 – 23:30</span></div>
-        <div class="footer-hours-item"><span class="day">Sun</span><span>11:00 – 22:00</span></div>
-        <div class="footer-hours-item"><span class="day">Mon</span><span style="color:#ff8080">Closed</span></div>
+    </div>
+  </section>
+
+  <!-- Press Awards -->
+  <section class="section" id="press">
+    <div class="container">
+      <div class="text-center reveal" style="margin-bottom: var(--space-12);">
+        <span class="section-label">Recognition</span>
+        <h2 class="section-title">Press & Awards</h2>
+      </div>
+      <div class="press-grid stagger">
+        <div class="press-card">
+          <div class="press-card-year">2024</div>
+          <div class="press-card-award">Best Restaurant</div>
+          <div class="press-card-pub">Time Out Mumbai Awards</div>
+        </div>
+        <div class="press-card">
+          <div class="press-card-year">2023</div>
+          <div class="press-card-award">Best Bar Programme</div>
+          <div class="press-card-pub">India Food Awards</div>
+        </div>
+        <div class="press-card">
+          <div class="press-card-year">2022</div>
+          <div class="press-card-award">Forbes 30 Under 30</div>
+          <div class="press-card-pub">Food & Beverage Category</div>
+        </div>
+        <div class="press-card">
+          <div class="press-card-year">2019</div>
+          <div class="press-card-award">Best New Restaurant</div>
+          <div class="press-card-pub">Condé Nast Traveller India</div>
+        </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Ember & Oak. All rights reserved.</span>
-      <div class="footer-bottom-links"><a href="#" class="footer-bottom-link">Privacy</a><a href="#" class="footer-bottom-link">Terms</a></div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-banner section--sm" id="about-cta">
+    <div class="container text-center reveal">
+      <span class="accent-text" style="display:block; margin-bottom: var(--space-3);">Experience the Story</span>
+      <h2 class="section-title">Come Taste Our Passion</h2>
+      <p class="section-subtitle" style="margin: var(--space-4) auto var(--space-8);">Every story deserves a great meal.
+        Reserve your table and become part of ours.</p>
+      <a href="reservations.html" class="btn btn-primary btn-lg">🍽️ Reserve a Table</a>
     </div>
-  </div>
-</footer>
-<a href="reservations.html" class="float-reserve btn btn-primary" id="float-reserve">🍽️ Reserve</a>
-<button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
-<script src="js/main.js"></script>
+  </section>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name">Ember <span>&</span> Oak</div>
+          <p class="footer-brand-desc">Premium wood-fired cuisine and craft cocktails in the heart of the city.</p>
+          <div class="footer-social"><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">👤</a><a
+              href="#" class="social-btn">🐦</a></div>
+        </div>
+        <div>
+          <h3 class="footer-heading">Quick Links</h3>
+          <nav class="footer-links">
+            <a href="index.html" class="footer-link">🏠 Home</a><a href="menu.html" class="footer-link">📋 Menu</a>
+            <a href="about.html" class="footer-link">👨‍🍳 About</a><a href="gallery.html" class="footer-link">🖼️
+              Gallery</a>
+            <a href="reservations.html" class="footer-link">🍽️ Reservations</a><a href="contact.html"
+              class="footer-link">📍 Contact</a>
+          </nav>
+        </div>
+        <div>
+          <h3 class="footer-heading">Contact</h3>
+          <div class="footer-links">
+            <span class="footer-link">📍 12 Oak Lane, Bandra West, Mumbai</span>
+            <a href="tel:+919876543210" class="footer-link">📞 +91 98765 43210</a>
+            <a href="mailto:hello@emberandoak.com" class="footer-link">✉️ hello@emberandoak.com</a>
+          </div>
+        </div>
+        <div>
+          <h3 class="footer-heading">Hours</h3>
+          <div class="footer-hours-item"><span class="day">Tue – Fri</span><span>12:00 – 23:00</span></div>
+          <div class="footer-hours-item"><span class="day">Sat</span><span>11:00 – 23:30</span></div>
+          <div class="footer-hours-item"><span class="day">Sun</span><span>11:00 – 22:00</span></div>
+          <div class="footer-hours-item"><span class="day">Mon</span><span style="color:#ff8080">Closed</span></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Ember & Oak. All rights reserved.</span>
+        <div class="footer-bottom-links"><a href="#" class="footer-bottom-link">Privacy</a><a href="#"
+            class="footer-bottom-link">Terms</a></div>
+      </div>
+    </div>
+  </footer>
+  <a href="reservations.html" class="float-reserve btn btn-primary" id="float-reserve">🍽️ Reserve</a>
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
+  <script src="js/main.js"></script>
 </body>
+
 </html>
