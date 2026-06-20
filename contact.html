@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — Ember & Oak</title>
+  <meta name="description" content="Contact Ember & Oak restaurant — address, opening hours, phone, email, and Google Maps directions. Located in Bandra West, Mumbai." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: var(--space-12);
+      align-items: start;
+    }
+    .contact-form-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-10);
+    }
+    .contact-info-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      margin-bottom: var(--space-5);
+    }
+    .contact-info-card h3 { font-size: var(--fs-lg); margin-bottom: var(--space-5); padding-bottom: var(--space-3); border-bottom: 1px solid var(--clr-border); }
+    .contact-detail { display:flex; align-items:flex-start; gap: var(--space-4); padding: var(--space-4) 0; border-bottom: 1px solid var(--clr-border); }
+    .contact-detail:last-child { border-bottom: none; padding-bottom: 0; }
+    .contact-detail-icon { width:44px; height:44px; border-radius: var(--radius-md); background: var(--clr-primary-glow); border:1px solid var(--clr-border); display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+    .contact-detail-label { font-size: var(--fs-xs); font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color: var(--clr-primary); margin-bottom: var(--space-1); }
+    .contact-detail-value { font-size: var(--fs-sm); color: var(--clr-text-2); }
+    .hours-table { width:100%; }
+    .hours-row { display:flex; justify-content:space-between; padding: var(--space-3) 0; border-bottom:1px solid var(--clr-border); font-size: var(--fs-sm); }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-day { color: var(--clr-text-2); }
+    .hours-time { font-weight:500; }
+    .form-success-msg { display:none; text-align:center; padding: var(--space-8); }
+    .form-success-msg .success-icon { font-size:3rem; display:block; margin-bottom: var(--space-4); }
+    @media(max-width:1024px){ .contact-layout{ grid-template-columns:1fr; } }
+    @media(max-width:600px){ .contact-form-card{ padding: var(--space-6); } }
+  </style>
+</head>
+<body>
+<div id="page-loader" class="page-loader">
+  <div style="text-align:center">
+    <div class="loader-logo">Ember <span>&</span> Oak</div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
+</div>
+<nav id="navbar" class="navbar scrolled" role="navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="nav-logo-name">Ember <span>&</span> Oak</span><span class="nav-logo-tagline">Wood-Fired · Craft Cocktails</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a><a href="menu.html" class="nav-link">Menu</a>
+      <a href="about.html" class="nav-link">About</a><a href="gallery.html" class="nav-link">Gallery</a>
+      <a href="contact.html" class="nav-link active">Contact</a>
+    </div>
+    <a href="reservations.html" class="btn btn-primary btn-sm nav-cta">Reserve a Table</a>
+    <button id="nav-hamburger" class="nav-hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div id="nav-drawer" class="nav-drawer">
+  <a href="index.html" class="nav-link">Home</a><a href="menu.html" class="nav-link">Menu</a>
+  <a href="about.html" class="nav-link">About</a><a href="gallery.html" class="nav-link">Gallery</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="reservations.html" class="btn btn-primary btn-lg" style="margin-top:1rem">Reserve a Table</a>
+</div>
+
+<div class="page-hero">
+  <div class="container text-center reveal">
+    <span class="section-label">We'd Love to Hear from You</span>
+    <h1 class="section-title" style="font-size: var(--fs-4xl);">Contact Us</h1>
+    <p class="section-subtitle" style="margin-inline:auto; margin-top: var(--space-4);">Questions, feedback, private events — we're always happy to help.</p>
+  </div>
+</div>
+
+<!-- Map -->
+<div style="background: var(--clr-surface); border-top:1px solid var(--clr-border); border-bottom:1px solid var(--clr-border); padding: var(--space-8) 0;" id="map-section">
+  <div class="container">
+    <div class="map-wrap reveal">
+      <!-- Bandra West, Mumbai embedded map -->
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.565!2d72.8274!3d19.0596!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c93f0e2b6b9f%3A0x0!2sBandra+West%2C+Mumbai!5e0!3m2!1sen!2sin!4v1718700000000!5m2!1sen!2sin"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        title="Ember & Oak location map">
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<!-- Contact Section -->
+<section class="section" id="contact-section">
+  <div class="container">
+    <div class="contact-layout">
+
+      <!-- Contact Form -->
+      <div class="contact-form-card reveal">
+        <h2 style="font-family:var(--font-heading); font-size:var(--fs-2xl); margin-bottom:var(--space-2);">Send Us a Message</h2>
+        <p style="font-size:var(--fs-sm); color:var(--clr-muted); margin-bottom:var(--space-8);">We typically respond within 4 business hours.</p>
+
+        <form id="contact-form" novalidate action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-5); margin-bottom:var(--space-5);">
+            <div class="form-group">
+              <label class="form-label" for="contact-name">Your Name *</label>
+              <input class="form-control" type="text" id="contact-name" name="name" placeholder="Full name" required autocomplete="name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-email">Email Address *</label>
+              <input class="form-control" type="email" id="contact-email" name="email" placeholder="you@example.com" required autocomplete="email" />
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:var(--space-5);">
+            <label class="form-label" for="contact-subject">Subject *</label>
+            <select class="form-control" id="contact-subject" name="subject" required>
+              <option value="" disabled selected>Select a topic</option>
+              <option>General Enquiry</option>
+              <option>Private Event / Corporate Dining</option>
+              <option>Press &amp; Media</option>
+              <option>Feedback / Complaint</option>
+              <option>Careers</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:var(--space-8);">
+            <label class="form-label" for="contact-message">Message *</label>
+            <textarea class="form-control" id="contact-message" name="message" placeholder="Tell us how we can help..." rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg ripple" id="contact-submit-btn" style="width:100%; justify-content:center;">
+            ✉️ Send Message
+          </button>
+        </form>
+
+        <div class="form-success-msg" id="contact-success">
+          <span class="success-icon">✅</span>
+          <h3 style="font-family:var(--font-heading); margin-bottom:var(--space-3)">Message Received!</h3>
+          <p style="color:var(--clr-muted); font-size:var(--fs-sm)">Thank you for reaching out. We'll get back to you within 4 hours.</p>
+        </div>
+      </div>
+
+      <!-- Sidebar Info -->
+      <div class="reveal-right">
+        <div class="contact-info-card">
+          <h3>Contact Information</h3>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📍</div>
+            <div>
+              <div class="contact-detail-label">Address</div>
+              <div class="contact-detail-value">12 Oak Lane, Bandra West<br>Mumbai 400050, Maharashtra</div>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📞</div>
+            <div>
+              <div class="contact-detail-label">Phone</div>
+              <a href="tel:+919876543210" class="contact-detail-value" style="color: var(--clr-primary);">+91 98765 43210</a>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">✉️</div>
+            <div>
+              <div class="contact-detail-label">Email</div>
+              <a href="mailto:hello@emberandoak.com" class="contact-detail-value" style="color: var(--clr-primary);">hello@emberandoak.com</a>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📸</div>
+            <div>
+              <div class="contact-detail-label">Social</div>
+              <div class="contact-detail-value">@ember_and_oak</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-info-card">
+          <h3>🕐 Opening Hours</h3>
+          <div class="hours-table">
+            <div class="hours-row"><span class="hours-day">Tuesday – Friday</span><span class="hours-time">12:00 – 23:00</span></div>
+            <div class="hours-row"><span class="hours-day">Saturday</span><span class="hours-time">11:00 – 23:30</span></div>
+            <div class="hours-row"><span class="hours-day">Sunday</span><span class="hours-time">11:00 – 22:00</span></div>
+            <div class="hours-row"><span class="hours-day">Monday</span><span class="hours-time" style="color:#ff8080">Closed</span></div>
+          </div>
+        </div>
+
+        <div class="contact-info-card">
+          <h3>🚗 Getting Here</h3>
+          <div style="font-size:var(--fs-sm); color:var(--clr-text-2); display:flex; flex-direction:column; gap:var(--space-3);">
+            <div><strong style="color:var(--clr-text)">By Metro:</strong> Bandra Station (Western Line) — 5 min walk</div>
+            <div><strong style="color:var(--clr-text)">By Car:</strong> Valet parking available from 7 PM daily</div>
+            <div><strong style="color:var(--clr-text)">By Auto:</strong> Auto-rickshaws available outside the station</div>
+            <div><strong style="color:var(--clr-text)">Parking:</strong> Paid parking available on Oak Lane</div>
+          </div>
+        </div>
+
+        <a href="reservations.html" class="btn btn-primary btn-lg" style="width:100%; justify-content:center; display:flex;">
+          🍽️ Reserve a Table
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">Ember <span>&</span> Oak</div>
+        <p class="footer-brand-desc">Premium wood-fired cuisine and craft cocktails in the heart of the city.</p>
+        <div class="footer-social"><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">👤</a><a href="#" class="social-btn">🐦</a></div>
+      </div>
+      <div>
+        <h3 class="footer-heading">Quick Links</h3>
+        <nav class="footer-links">
+          <a href="index.html" class="footer-link">🏠 Home</a><a href="menu.html" class="footer-link">📋 Menu</a>
+          <a href="about.html" class="footer-link">👨‍🍳 About</a><a href="gallery.html" class="footer-link">🖼️ Gallery</a>
+          <a href="reservations.html" class="footer-link">🍽️ Reservations</a><a href="contact.html" class="footer-link">📍 Contact</a>
+        </nav>
+      </div>
+      <div>
+        <h3 class="footer-heading">Contact</h3>
+        <div class="footer-links">
+          <span class="footer-link">📍 12 Oak Lane, Bandra West, Mumbai</span>
+          <a href="tel:+919876543210" class="footer-link">📞 +91 98765 43210</a>
+          <a href="mailto:hello@emberandoak.com" class="footer-link">✉️ hello@emberandoak.com</a>
+        </div>
+      </div>
+      <div>
+        <h3 class="footer-heading">Hours</h3>
+        <div class="footer-hours-item"><span class="day">Tue – Fri</span><span>12:00 – 23:00</span></div>
+        <div class="footer-hours-item"><span class="day">Sat</span><span>11:00 – 23:30</span></div>
+        <div class="footer-hours-item"><span class="day">Sun</span><span>11:00 – 22:00</span></div>
+        <div class="footer-hours-item"><span class="day">Mon</span><span style="color:#ff8080">Closed</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Ember & Oak. All rights reserved.</span>
+      <div class="footer-bottom-links"><a href="#" class="footer-bottom-link">Privacy</a><a href="#" class="footer-bottom-link">Terms</a></div>
+    </div>
+  </div>
+</footer>
+<a href="reservations.html" class="float-reserve btn btn-primary" id="float-reserve">🍽️ Reserve</a>
+<button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
+<script src="js/main.js"></script>
+<script>
+// Contact form submit
+const cf = document.getElementById('contact-form');
+const cs = document.getElementById('contact-success');
+cf?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = cf.querySelector('[type="submit"]');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  await new Promise(r => setTimeout(r, 1200));
+  cf.style.display = 'none';
+  if(cs){ cs.style.display='block'; cs.classList.add('success-pop'); }
+});
+</script>
+</body>
+</html>

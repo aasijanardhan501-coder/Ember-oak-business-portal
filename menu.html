@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu — Ember &amp; Oak</title>
+  <meta name="description" content="Explore Ember &amp; Oak's full menu — wood-fired mains, starters, desserts, and craft cocktails. Every dish crafted with locally sourced ingredients." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    /* ══════════════════════════════════════
+       SEARCH PANEL
+    ══════════════════════════════════════ */
+    .search-panel {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6) var(--space-8);
+      margin-bottom: var(--space-8);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Search input row */
+    .search-input-wrap {
+      position: relative;
+      margin-bottom: var(--space-5);
+    }
+    .search-icon {
+      position: absolute;
+      left: var(--space-5);
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.15rem;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    .search-clear {
+      position: absolute;
+      right: var(--space-4);
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--clr-surface-3);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-full);
+      color: var(--clr-muted);
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity var(--transition);
+      pointer-events: none;
+    }
+    .search-clear.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .search-clear:hover { background: var(--clr-primary); color: var(--clr-bg); border-color: var(--clr-primary); }
+    #menu-search {
+      width: 100%;
+      padding: var(--space-4) var(--space-5) var(--space-4) 3rem;
+      background: var(--clr-surface-2);
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      color: var(--clr-text);
+      font-family: var(--font-body);
+      font-size: var(--fs-md);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+    }
+    #menu-search::placeholder { color: var(--clr-muted); }
+    #menu-search:focus {
+      border-color: var(--clr-primary);
+      box-shadow: 0 0 0 3px var(--clr-primary-glow);
+      background: var(--clr-surface-3);
+    }
+
+    /* Filter row divider */
+    .search-divider {
+      height: 1px;
+      background: var(--clr-border);
+      margin: var(--space-4) 0;
+    }
+
+    /* Filter row */
+    .search-filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-6);
+    }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+    .filter-group-label {
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--clr-primary);
+      margin-right: var(--space-1);
+      white-space: nowrap;
+    }
+    .filter-chip {
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--clr-muted);
+      border: 1px solid var(--clr-border);
+      background: var(--clr-surface-2);
+      transition: all 0.22s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .filter-chip:hover {
+      color: var(--clr-text);
+      border-color: var(--clr-primary);
+      background: var(--clr-surface-3);
+    }
+    .filter-chip.active {
+      background: var(--clr-primary);
+      color: var(--clr-bg);
+      border-color: var(--clr-primary);
+      font-weight: 700;
+      box-shadow: 0 3px 12px rgba(201,137,63,0.5);
+    }
+
+    /* Results bar */
+    .search-results-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-bottom: var(--space-5);
+    }
+    .results-count {
+      font-size: var(--fs-sm);
+      color: var(--clr-muted);
+    }
+    .results-count strong { color: var(--clr-primary); font-size: var(--fs-md); }
+    .search-reset-btn {
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--clr-muted);
+      border: 1px solid var(--clr-border);
+      background: transparent;
+      border-radius: var(--radius-full);
+      padding: 4px 14px;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: none;
+    }
+    .search-reset-btn.visible { display: inline-flex; align-items: center; gap: 5px; }
+    .search-reset-btn:hover { color: var(--clr-text); border-color: var(--clr-primary); }
+
+    /* ── Menu card layout ── */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--space-6);
+    }
+    .menu-item-card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+    .menu-item-card:hover {
+      border-color: var(--clr-primary);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+    }
+    .menu-item-img-wrap { position: relative; overflow: hidden; }
+    .menu-item-img {
+      width: 100%; aspect-ratio: 16/10; object-fit: cover;
+      transition: transform 0.6s var(--ease);
+      display: block;
+    }
+    .menu-item-card:hover .menu-item-img { transform: scale(1.06); }
+    .menu-item-body { padding: var(--space-5); flex: 1; display: flex; flex-direction: column; }
+    .menu-item-header { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-3); margin-bottom: var(--space-2); }
+    .menu-item-name { font-family: var(--font-heading); font-size: var(--fs-lg); font-weight: 600; color: var(--clr-text); line-height: 1.3; }
+    .menu-item-price { font-family: var(--font-heading); font-size: var(--fs-xl); font-weight: 700; color: var(--clr-primary); white-space: nowrap; }
+    .menu-item-desc { font-size: var(--fs-sm); color: var(--clr-muted); line-height: 1.6; margin-bottom: var(--space-4); flex: 1; }
+    .menu-item-footer { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+    /* ── Search highlight ── */
+    mark.search-hl {
+      background: rgba(201,137,63,0.35);
+      color: var(--clr-text);
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+
+    /* ── Empty state ── */
+    .menu-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: var(--space-20) var(--space-8);
+      color: var(--clr-muted);
+    }
+    .menu-empty-icon { font-size: 3.5rem; display: block; margin-bottom: var(--space-4); }
+    .menu-empty-title { font-family: var(--font-heading); font-size: var(--fs-xl); color: var(--clr-text-2); margin-bottom: var(--space-2); }
+
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 768px) {
+      .search-panel { padding: var(--space-5); }
+      .search-filters-row { gap: var(--space-4); }
+      .menu-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 500px) {
+      .filter-group { gap: var(--space-1); }
+      .filter-chip { padding: 4px 10px; font-size: 0.7rem; }
+    }
+
+    /* ── placeholder ── */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-top: var(--space-5);
+      padding: var(--space-4) var(--space-5);
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+    }
+    .filter-bar-label {
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clr-primary);
+      white-space: nowrap;
+      margin-right: var(--space-1);
+    }
+    .price-filter-btn {
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--clr-muted);
+      border: 1px solid var(--clr-border);
+      background: var(--clr-surface-2);
+      transition: all var(--transition);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .price-filter-btn:hover { color: var(--clr-text); border-color: var(--clr-primary); }
+    .price-filter-btn.active {
+      background: linear-gradient(135deg, var(--clr-primary-dark), var(--clr-primary));
+      color: var(--clr-bg);
+      border-color: var(--clr-primary);
+      box-shadow: 0 4px 14px rgba(201,137,63,0.45);
+    }
+
+    /* ── Results count ── */
+    .menu-results-count {
+      font-size: var(--fs-xs);
+      color: var(--clr-muted);
+      margin-top: var(--space-4);
+      margin-bottom: calc(-1 * var(--space-4));
+      font-weight: 500;
+    }
+    .menu-results-count span { color: var(--clr-primary); font-weight: 700; }
+
+    /* ── Empty state ── */
+    .menu-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: var(--space-20) var(--space-8);
+      color: var(--clr-muted);
+    }
+    .menu-empty-icon { font-size: 3rem; display: block; margin-bottom: var(--space-4); }
+    .menu-empty-title { font-family: var(--font-heading); font-size: var(--fs-xl); color: var(--clr-text-2); margin-bottom: var(--space-2); }
+
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 600px) {
+      .menu-grid { grid-template-columns: 1fr; }
+      .filter-bar { gap: var(--space-2); }
+    }
+  </style>
+</head>
+<body>
+<div id="page-loader" class="page-loader">
+  <div style="text-align:center">
+    <div class="loader-logo">Ember <span>&</span> Oak</div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
+</div>
+
+<nav id="navbar" class="navbar scrolled" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="nav-logo-name">Ember <span>&</span> Oak</span><span class="nav-logo-tagline">Wood-Fired · Craft Cocktails</span></a>
+    <div class="nav-links">
+      <a href="index.html"        class="nav-link">Home</a>
+      <a href="menu.html"         class="nav-link active">Menu</a>
+      <a href="about.html"        class="nav-link">About</a>
+      <a href="gallery.html"      class="nav-link">Gallery</a>
+      <a href="contact.html"      class="nav-link">Contact</a>
+    </div>
+    <a href="reservations.html" class="btn btn-primary btn-sm nav-cta">Reserve a Table</a>
+    <button id="nav-hamburger" class="nav-hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div id="nav-drawer" class="nav-drawer">
+  <a href="index.html" class="nav-link">Home</a><a href="menu.html" class="nav-link">Menu</a>
+  <a href="about.html" class="nav-link">About</a><a href="gallery.html" class="nav-link">Gallery</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="reservations.html" class="btn btn-primary btn-lg" style="margin-top:1rem">Reserve a Table</a>
+</div>
+
+<!-- Page Hero -->
+<div class="page-hero" style="padding-top: calc(var(--nav-height) + 3rem);">
+  <div class="container text-center reveal">
+    <span class="section-label">Crafted with Passion</span>
+    <h1 class="section-title" style="font-size: var(--fs-4xl);">Our Menu</h1>
+    <p class="section-subtitle" style="margin-inline:auto; margin-top: var(--space-4);">From wood-fired mains to hand-crafted cocktails — every item is a labour of love.</p>
+  </div>
+</div>
+
+<!-- Menu Section -->
+<section class="section" id="menu-section">
+  <div class="container">
+
+    <!-- Unified Search & Filter Panel -->
+    <div class="search-panel">
+      <!-- Search Input -->
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="menu-search" placeholder="Search for dishes, ingredients, or keywords (e.g., Burrata, Ribeye)..." aria-label="Search menu items" />
+        <button class="search-clear" id="search-clear" aria-label="Clear search">×</button>
+      </div>
+
+      <!-- Divider -->
+      <div class="search-divider"></div>
+
+      <!-- Filters Row -->
+      <div class="search-filters-row">
+        <!-- Category Filter Group -->
+        <div class="filter-group" id="category-filter-group">
+          <span class="filter-group-label">Category</span>
+          <button class="filter-chip active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="starters">🥗 Starters</button>
+          <button class="filter-chip" data-filter="mains">🥩 Mains</button>
+          <button class="filter-chip" data-filter="desserts">🍮 Desserts</button>
+          <button class="filter-chip" data-filter="cocktails">🍹 Cocktails</button>
+        </div>
+
+        <!-- Price Filter Group -->
+        <div class="filter-group" id="price-filter-group">
+          <span class="filter-group-label">Price</span>
+          <button class="filter-chip active" data-price-min="0"    data-price-max="99999">All Prices</button>
+          <button class="filter-chip"        data-price-min="0"    data-price-max="699">Under ₹700</button>
+          <button class="filter-chip"        data-price-min="700"  data-price-max="1499">₹700 – ₹1,499</button>
+          <button class="filter-chip"        data-price-min="1500" data-price-max="2499">₹1,500 – ₹2,499</button>
+          <button class="filter-chip"        data-price-min="2500" data-price-max="99999">Above ₹2,500</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Results Bar -->
+    <div class="search-results-bar">
+      <p class="results-count" id="menu-results-count">
+        Showing <strong id="visible-count">24</strong> items
+      </p>
+      <button class="search-reset-btn" id="search-reset-btn">
+        🔄 Reset all filters
+      </button>
+    </div>
+
+    <div class="menu-grid" id="menu-grid">
+
+      <!-- ═══════════ STARTERS ═══════════ -->
+
+      <article class="menu-item-card" data-category="starters" data-price="680">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=800&q=80" alt="Burrata & Heirloom Tomato" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Burrata &amp; Heirloom Tomato</h2><span class="menu-item-price">₹680</span></div>
+          <p class="menu-item-desc">Creamy burrata with heirloom tomatoes, basil oil, sea salt flakes, and grilled sourdough.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span><span class="badge badge-gf">Gluten Free</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="starters" data-price="920">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1559742811-822873691df8?w=800&q=80" alt="Fire-Grilled Prawns" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-spicy">Spicy</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Fire-Grilled Prawns</h2><span class="menu-item-price">₹920</span></div>
+          <p class="menu-item-desc">Jumbo tiger prawns marinated in lemon-garlic butter, grilled over open flame with chimichurri dip.</p>
+          <div class="menu-item-footer"><span class="badge badge-gf">Gluten Free</span><span class="badge badge-spicy">Spicy</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="starters" data-price="1200">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1555243896-c709bfa0b564?w=800&q=80" alt="Smoked Charcuterie Board" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-chef">Shareable</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Smoked Charcuterie Board</h2><span class="menu-item-price">₹1,200</span></div>
+          <p class="menu-item-desc">House-cured meats, artisan cheeses, cornichons, Medjool dates, honeycomb, and toasted baguette.</p>
+          <div class="menu-item-footer"><span class="badge badge-chef">Shareable</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="starters" data-price="480">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80" alt="Roasted Tomato Bisque" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Roasted Tomato Bisque</h2><span class="menu-item-price">₹480</span></div>
+          <p class="menu-item-desc">Slow-roasted heirloom tomato soup with basil cream, crunchy croutons, and smoked paprika oil.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="starters" data-price="580">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=800&q=80" alt="Truffle Arancini" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Truffle Arancini</h2><span class="menu-item-price">₹580</span></div>
+          <p class="menu-item-desc">Crispy risotto balls filled with black truffle and mozzarella, served with saffron aioli and micro herbs.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span><span class="badge badge-new">Fan Favourite</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="starters" data-price="980">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=800&q=80" alt="Sesame Tuna Tataki" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-gf">Gluten Free</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Sesame Tuna Tataki</h2><span class="menu-item-price">₹980</span></div>
+          <p class="menu-item-desc">Seared yellowfin tuna, sesame crust, ponzu gel, pickled daikon, tobiko caviar, and wasabi cream.</p>
+          <div class="menu-item-footer"><span class="badge badge-gf">Gluten Free</span><span class="badge badge-chef">Chef's Pick</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="starters" data-price="650">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=800&q=80" alt="Wood-Fired Brie & Honey" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Wood-Fired Brie &amp; Honey</h2><span class="menu-item-price">₹650</span></div>
+          <p class="menu-item-desc">Creamy double-cream brie baked in our wood-fired oven with rosemary, wild honey, and toasted walnuts. Served with grilled rustic sourdough.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="starters" data-price="780">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1544025162-d76538485491?w=800&q=80" alt="Glazed Pork Belly Skewers" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-chef">Chef's Choice</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Glazed Pork Belly Skewers</h2><span class="menu-item-price">₹780</span></div>
+          <p class="menu-item-desc">Crispy wood-fired pork belly skewers glazed with a ginger, honey, and dark soy reduction, topped with green onions and toasted sesame.</p>
+          <div class="menu-item-footer"><span class="badge badge-chef">Chef's Choice</span></div>
+        </div>
+      </article>
+
+      <!-- ═══════════ MAINS ═══════════ -->
+
+      <article class="menu-item-card" data-category="mains" data-price="2800">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&q=80" alt="Oak-Smoked Ribeye" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-chef">Chef's Choice</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Oak-Smoked Ribeye</h2><span class="menu-item-price">₹2,800</span></div>
+          <p class="menu-item-desc">400g prime dry-aged ribeye over white oak coals. Truffle butter, roasted garlic confit, seasonal greens.</p>
+          <div class="menu-item-footer"><span class="badge badge-gf">Gluten Free</span><span class="badge badge-spicy">Bold</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="mains" data-price="1650">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1598103442097-8b74394b95c5?w=800&q=80" alt="Spatchcock Chicken" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-gf">Gluten Free</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Spatchcock Chicken</h2><span class="menu-item-price">₹1,650</span></div>
+          <p class="menu-item-desc">Whole flattened chicken, brined 24hrs, wood-fired with za'atar crust. Served with smashed potatoes and salsa verde.</p>
+          <div class="menu-item-footer"><span class="badge badge-gf">Gluten Free</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="mains" data-price="2100">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&q=80" alt="Miso-Glazed Sea Bass" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-new">New</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Miso-Glazed Sea Bass</h2><span class="menu-item-price">₹2,100</span></div>
+          <p class="menu-item-desc">Fillet of Chilean sea bass, 48hr miso marinade, flame-kissed. Served with charred bok choy and yuzu beurre blanc.</p>
+          <div class="menu-item-footer"><span class="badge badge-gf">Gluten Free</span><span class="badge badge-new">New</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="mains" data-price="1200">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?w=800&q=80" alt="Wild Mushroom Risotto" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Wild Mushroom Risotto</h2><span class="menu-item-price">₹1,200</span></div>
+          <p class="menu-item-desc">Carnaroli rice, porcini, truffle paste, aged Parmigiano-Reggiano, crispy sage, and white wine reduction.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="mains" data-price="2400">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=800&q=80" alt="Lamb Rack" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-chef">Chef's Special</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Lamb Rack</h2><span class="menu-item-price">₹2,400</span></div>
+          <p class="menu-item-desc">8-bone rack of lamb, herb-crusted, wood-fired to perfect pink. Rosemary jus, minted pea purée, dauphinoise potato.</p>
+          <div class="menu-item-footer"><span class="badge badge-gf">Gluten Free</span><span class="badge badge-chef">Chef's Special</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="mains" data-price="3800">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?w=800&q=80" alt="Whole Lobster Thermidor" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-chef">Chef's Signature</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Whole Lobster Thermidor</h2><span class="menu-item-price">₹3,800</span></div>
+          <p class="menu-item-desc">Half lobster split & flame-finished, Thermidor sauce of cognac, cream, tarragon & Gruyère. Served with hand-cut fries.</p>
+          <div class="menu-item-footer"><span class="badge badge-gf">Gluten Free</span><span class="badge badge-chef">Signature</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="mains" data-price="2200">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1544025162-d76538485491?w=800&q=80" alt="BBQ Baby Back Ribs" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-spicy">Bold</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">BBQ Baby Back Ribs</h2><span class="menu-item-price">₹2,200</span></div>
+          <p class="menu-item-desc">Full rack slow-cooked 6 hrs, glazed with house hickory BBQ sauce, finished over live fire. Coleslaw & corn on the side.</p>
+          <div class="menu-item-footer"><span class="badge badge-gf">Gluten Free</span><span class="badge badge-spicy">Smoky</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="mains" data-price="980">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80" alt="Charred Veggie Platter" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegan</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Charred Veggie Platter</h2><span class="menu-item-price">₹980</span></div>
+          <p class="menu-item-desc">Seasonal vegetables char-grilled over oakwood: broccolini, corn, zucchini, bell peppers with romesco and tahini drizzle.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegan</span><span class="badge badge-gf">Gluten Free</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="mains" data-price="1650">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800&q=80" alt="Wood-Fired Salmon Filet" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-gf">Gluten Free</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Wood-Fired Salmon Filet</h2><span class="menu-item-price">₹1,650</span></div>
+          <p class="menu-item-desc">Atlantic salmon filet roasted on a cedar plank in our wood oven. Served with flame-grilled asparagus, baby potatoes, and a velvety dill hollandaise.</p>
+          <div class="menu-item-footer"><span class="badge badge-gf">Gluten Free</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="mains" data-price="950">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=800&q=80" alt="Wood-Fired Truffle Gnocchi" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Wood-Fired Truffle Gnocchi</h2><span class="menu-item-price">₹950</span></div>
+          <p class="menu-item-desc">Handmade potato gnocchi baked in a cast-iron skillet with black truffle cream, wild mushrooms, and melted Pecorino cheese.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span><span class="badge badge-new">New</span></div>
+        </div>
+      </article>
+
+      <!-- ═══════════ DESSERTS ═══════════ -->
+
+      <article class="menu-item-card" data-category="desserts" data-price="650">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=80" alt="Molten Dark Chocolate" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Molten Dark Chocolate</h2><span class="menu-item-price">₹650</span></div>
+          <p class="menu-item-desc">72% Valrhona lava cake, molten centre, house vanilla bean ice cream, raspberry coulis, gold dust.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="desserts" data-price="550">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=800&q=80" alt="Smoked Crème Brûlée" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Smoked Crème Brûlée</h2><span class="menu-item-price">₹550</span></div>
+          <p class="menu-item-desc">Classic French custard infused with oak smoke, caramelised to order. Served with seasonal berry compote.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span><span class="badge badge-gf">Gluten Free</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="desserts" data-price="480">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&q=80" alt="Mango Saffron Panna Cotta" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Mango Saffron Panna Cotta</h2><span class="menu-item-price">₹480</span></div>
+          <p class="menu-item-desc">Silky Italian panna cotta scented with saffron, Alphonso mango gel, toasted pistachio, edible rose petals.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span><span class="badge badge-gf">Gluten Free</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="desserts" data-price="420">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=800&q=80" alt="Affogato al Caffè" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Affogato al Caffè</h2><span class="menu-item-price">₹420</span></div>
+          <p class="menu-item-desc">A double shot of house espresso poured tableside over a scoop of house-churned Madagascar vanilla ice cream.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span><span class="badge badge-gf">Gluten Free</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="desserts" data-price="590">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1519676867240-f03562e64548?w=800&q=80" alt="Pistachio Baklava" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Pistachio Baklava Stack</h2><span class="menu-item-price">₹590</span></div>
+          <p class="menu-item-desc">Crisp layered pastry, crushed Sicilian pistachios, rose water honey syrup. Served with clotted cream ice cream.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span><span class="badge badge-new">New</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="desserts" data-price="580">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1537214992301-1b98b7a6279f?w=800&q=80" alt="Wood-Oven Peach Cobbler" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Wood-Oven Peach Cobbler</h2><span class="menu-item-price">₹580</span></div>
+          <p class="menu-item-desc">Caramelized seasonal peaches baked in a cast-iron skillet, topped with a golden buttermilk biscuit crust and vanilla bean ice cream.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="desserts" data-price="600">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1508737804141-4c3b688e2546?w=800&q=80" alt="Cast-Iron Apple Galette" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Cast-Iron Apple Galette</h2><span class="menu-item-price">₹600</span></div>
+          <p class="menu-item-desc">Rustic wood-fired tart of caramelized apples in a flaky pastry shell, served warm with house salted caramel ice cream.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span></div>
+        </div>
+      </article>
+
+      <!-- ═══════════ COCKTAILS ═══════════ -->
+
+      <article class="menu-item-card" data-category="cocktails" data-price="850">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=800&q=80" alt="Smoke &amp; Ember Old Fashioned" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-new">Bestseller</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Smoke &amp; Ember Old Fashioned</h2><span class="menu-item-price">₹850</span></div>
+          <p class="menu-item-desc">Bourbon, smoked demerara, Angostura bitters, orange peel. Served with cherry wood smoke dome.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Signature</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="cocktails" data-price="720">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80" alt="Ember Sour" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Signature</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Ember Sour</h2><span class="menu-item-price">₹720</span></div>
+          <p class="menu-item-desc">Whisky, charred lemon, honey syrup, egg white foam, activated charcoal salt rim. Silky and complex.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Signature</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="cocktails" data-price="680">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800&q=80" alt="Garden Gimlet" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-new">New</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Garden Gimlet</h2><span class="menu-item-price">₹680</span></div>
+          <p class="menu-item-desc">Gin, house-pressed cucumber juice, elderflower, fresh lime, basil. Crisp, herbal, and refreshing.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegetarian</span><span class="badge badge-new">New</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="cocktails" data-price="780">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80" alt="Amber Negroni" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Classic</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Amber Negroni</h2><span class="menu-item-price">₹780</span></div>
+          <p class="menu-item-desc">Premium gin, Campari, barrel-aged sweet vermouth, dehydrated orange, hand-chipped ice block.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Classic</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="cocktails" data-price="750">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=800&q=80" alt="Passion Fruit Margarita" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-new">New</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Passion Fruit Margarita</h2><span class="menu-item-price">₹750</span></div>
+          <p class="menu-item-desc">Tequila blanco, fresh passion fruit pulp, triple sec, lime juice, tajín rim. Tropical and vivid.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Vegan</span><span class="badge badge-new">New</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="cocktails" data-price="820">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1545438102-799c3991ffb2?w=800&q=80" alt="Espresso Martini" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Signature</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Espresso Martini</h2><span class="menu-item-price">₹820</span></div>
+          <p class="menu-item-desc">Vodka, fresh-pulled double espresso, Kahlúa, vanilla syrup. Topped with three espresso beans for luck.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Signature</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="cocktails" data-price="720">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1570598912132-0ba1dc952b7d?w=800&q=80" alt="Rosemary Gin &amp; Tonic" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-veg">Signature</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Rosemary Gin &amp; Tonic</h2><span class="menu-item-price">₹720</span></div>
+          <p class="menu-item-desc">Premium dry gin, artisanal tonic, fresh grapefruit wheel, and a sprig of fresh rosemary torched tableside to release aromatic oils.</p>
+          <div class="menu-item-footer"><span class="badge badge-veg">Signature</span></div>
+        </div>
+      </article>
+
+      <article class="menu-item-card" data-category="cocktails" data-price="780">
+        <div class="menu-item-img-wrap">
+          <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80" alt="Burning Bramble" class="menu-item-img" loading="lazy" />
+          <div style="position:absolute;top:var(--space-3);left:var(--space-3)"><span class="badge badge-new">New</span></div>
+        </div>
+        <div class="menu-item-body">
+          <div class="menu-item-header"><h2 class="menu-item-name">Burning Bramble</h2><span class="menu-item-price">₹780</span></div>
+          <p class="menu-item-desc">Dry gin, wild blackberry liqueur, freshly squeezed lemon juice, organic sugar syrup. Served with a smoking sprig of organic thyme.</p>
+          <div class="menu-item-footer"><span class="badge badge-new">New</span></div>
+        </div>
+      </article>
+
+      <!-- Empty state (hidden by default) -->
+      <div class="menu-empty" id="menu-empty" style="display:none">
+        <span class="menu-empty-icon">🍽️</span>
+        <p class="menu-empty-title">No items match your filters</p>
+        <p>Try a different category or price range.</p>
+      </div>
+
+    </div><!-- /menu-grid -->
+
+    <div class="text-center" style="margin-top: var(--space-12);">
+      <a href="reservations.html" class="btn btn-primary btn-lg">🍽️ Reserve Your Table</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">Ember <span>&</span> Oak</div>
+        <p class="footer-brand-desc">Premium wood-fired cuisine and craft cocktails in the heart of the city.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn" aria-label="Instagram">📸</a>
+          <a href="#" class="social-btn" aria-label="Facebook">👤</a>
+          <a href="#" class="social-btn" aria-label="Twitter">🐦</a>
+        </div>
+      </div>
+      <div>
+        <h3 class="footer-heading">Quick Links</h3>
+        <nav class="footer-links">
+          <a href="index.html" class="footer-link">🏠 Home</a>
+          <a href="menu.html" class="footer-link">📋 Menu</a>
+          <a href="about.html" class="footer-link">👨‍🍳 About</a>
+          <a href="gallery.html" class="footer-link">🖼️ Gallery</a>
+          <a href="reservations.html" class="footer-link">🍽️ Reservations</a>
+          <a href="contact.html" class="footer-link">📍 Contact</a>
+        </nav>
+      </div>
+      <div>
+        <h3 class="footer-heading">Contact</h3>
+        <div class="footer-links">
+          <span class="footer-link">📍 12 Oak Lane, Bandra West, Mumbai</span>
+          <a href="tel:+919876543210" class="footer-link">📞 +91 98765 43210</a>
+          <a href="mailto:hello@emberandoak.com" class="footer-link">✉️ hello@emberandoak.com</a>
+        </div>
+      </div>
+      <div>
+        <h3 class="footer-heading">Hours</h3>
+        <div class="footer-hours-item"><span class="day">Tue – Fri</span><span>12:00 – 23:00</span></div>
+        <div class="footer-hours-item"><span class="day">Sat</span><span>11:00 – 23:30</span></div>
+        <div class="footer-hours-item"><span class="day">Sun</span><span>11:00 – 22:00</span></div>
+        <div class="footer-hours-item"><span class="day">Mon</span><span style="color:#ff8080">Closed</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Ember &amp; Oak. All rights reserved.</span>
+      <div class="footer-bottom-links"><a href="#" class="footer-bottom-link">Privacy</a><a href="#" class="footer-bottom-link">Terms</a></div>
+    </div>
+  </div>
+</footer>
+<a href="reservations.html" class="float-reserve btn btn-primary" id="float-reserve">🍽️ Reserve</a>
+<button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
+<script src="js/main.js"></script>
+<script src="js/menu.js"></script>
+</body>
+</html>

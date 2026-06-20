@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ember & Oak — Wood-Fired Grill & Craft Cocktails</title>
+  <meta name="description" content="Ember & Oak is a premium wood-fired grill and craft cocktail bar offering locally sourced ingredients, unforgettable flavours, and an intimate dining experience." />
+  <meta name="keywords" content="wood fired grill, craft cocktails, premium restaurant, fine dining, local food" />
+  <meta property="og:title" content="Ember & Oak — Wood-Fired Grill & Craft Cocktails" />
+  <meta property="og:description" content="Premium wood-fired dining and craft cocktails in an intimate setting." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    /* ── Home-page specific styles ── */
+    .testimonials-section { overflow: hidden; }
+    .testimonials-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+    .testimonials-track {
+      display: flex;
+      gap: var(--space-6);
+      transition: transform 0.5s var(--ease);
+    }
+    .testimonials-track .testimonial-card {
+      flex: 0 0 calc(33.333% - var(--space-4));
+      min-width: 0;
+    }
+    .testimonials-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-4);
+      margin-top: var(--space-8);
+    }
+    .testimonials-arrow {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--clr-surface-2);
+      border: 1px solid var(--clr-border);
+      color: var(--clr-text);
+      font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+    .testimonials-arrow:hover {
+      background: var(--clr-primary);
+      border-color: var(--clr-primary);
+      color: var(--clr-bg);
+    }
+    .testimonials-dots { display: flex; gap: var(--space-2); }
+    .testimonial-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--clr-border-strong);
+      transition: all var(--transition); cursor: pointer;
+    }
+    .testimonial-dot.active {
+      background: var(--clr-primary);
+      width: 24px; border-radius: var(--radius-full);
+    }
+    .signature-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: var(--space-6);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 0;
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .stat-item { border-right: 1px solid var(--clr-border); }
+    .stat-item:last-child { border-right: none; }
+    .insta-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--space-2);
+    }
+    .insta-item {
+      aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      position: relative;
+      cursor: pointer;
+    }
+    .insta-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s var(--ease);
+      filter: brightness(0.85);
+    }
+    .insta-item:hover img { transform: scale(1.1); filter: brightness(1); }
+    .insta-item-overlay {
+      position: absolute; inset: 0;
+      background: rgba(201,137,63,0.3);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity var(--transition);
+      font-size: 1.4rem;
+    }
+    .insta-item:hover .insta-item-overlay { opacity: 1; }
+    @media (max-width: 768px) {
+      .signature-grid { grid-template-columns: 1fr; }
+      .insta-grid { grid-template-columns: repeat(3,1fr); }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3) { border-top: 1px solid var(--clr-border); }
+      .stat-item:nth-child(4) { border-top: 1px solid var(--clr-border); border-right: none; }
+      .testimonials-track .testimonial-card { flex: 0 0 calc(50% - var(--space-3)); }
+    }
+    @media (max-width: 480px) {
+      .insta-grid { grid-template-columns: repeat(2,1fr); }
+      .testimonials-track .testimonial-card { flex: 0 0 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Page Loader -->
+<div id="page-loader" class="page-loader">
+  <div style="text-align:center">
+    <div class="loader-logo">Ember <span>&</span> Oak</div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
+</div>
+
+<!-- Navbar -->
+<nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="Ember & Oak Home">
+      <span class="nav-logo-name">Ember <span>&</span> Oak</span>
+      <span class="nav-logo-tagline">Wood-Fired · Craft Cocktails</span>
+    </a>
+    <div class="nav-links" role="menubar">
+      <a href="index.html"        class="nav-link" role="menuitem">Home</a>
+      <a href="menu.html"         class="nav-link" role="menuitem">Menu</a>
+      <a href="about.html"        class="nav-link" role="menuitem">About</a>
+      <a href="gallery.html"      class="nav-link" role="menuitem">Gallery</a>
+      <a href="contact.html"      class="nav-link" role="menuitem">Contact</a>
+    </div>
+    <a href="reservations.html" class="btn btn-primary btn-sm nav-cta" id="nav-reserve-btn">Reserve a Table</a>
+    <button id="nav-hamburger" class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav Drawer -->
+<div id="nav-drawer" class="nav-drawer" role="dialog" aria-label="Mobile navigation">
+  <a href="index.html"   class="nav-link">Home</a>
+  <a href="menu.html"    class="nav-link">Menu</a>
+  <a href="about.html"   class="nav-link">About</a>
+  <a href="gallery.html" class="nav-link">Gallery</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="reservations.html" class="btn btn-primary btn-lg" style="margin-top:1rem">Reserve a Table</a>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- HERO                                                   -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="hero" aria-label="Hero section" id="hero">
+  <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1920&q=85')"></div>
+  <div class="hero-overlay"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-label">
+        <span class="hero-label-line"></span>
+        Est. 2018 · Downtown
+        <span class="hero-label-line"></span>
+      </div>
+      <h1 class="hero-title">
+        Where <em>Fire</em> Meets<br>Flavour & Craft
+      </h1>
+      <p class="hero-subtitle">
+        Premium wood-fired cuisine and hand-crafted cocktails in an intimate, 
+        candlelit setting. Every dish tells a story of passion, smoke, and locally sourced ingredients.
+      </p>
+      <div class="hero-cta">
+        <a href="reservations.html" class="btn btn-primary btn-lg ripple" id="hero-reserve-btn">
+          🍽️ Reserve a Table
+        </a>
+        <a href="menu.html" class="btn btn-outline btn-lg" id="hero-menu-btn">
+          Explore Menu
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- Scroll indicator removed as requested -->
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- FEATURES BAR                                           -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="features-bar" aria-label="Key features">
+  <div class="container">
+    <div class="features-grid stagger">
+      <div class="feature-item">
+        <div class="feature-icon">🔥</div>
+        <div class="feature-text">
+          <h4>Wood-Fired Cooking</h4>
+          <p>Authentic oak &amp; hickory smoke</p>
+        </div>
+      </div>
+      <div class="feature-divider"></div>
+      <div class="feature-item">
+        <div class="feature-icon">🍹</div>
+        <div class="feature-text">
+          <h4>Craft Cocktails</h4>
+          <p>Seasonal, hand-crafted bar menu</p>
+        </div>
+      </div>
+      <div class="feature-divider"></div>
+      <div class="feature-item">
+        <div class="feature-icon">🌿</div>
+        <div class="feature-text">
+          <h4>Locally Sourced</h4>
+          <p>Farm-to-table, seasonal produce</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SIGNATURE DISHES                                       -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="section" id="signature" aria-label="Signature dishes">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Taste the Difference</span>
+      <h2 class="section-title">Our Signature Dishes</h2>
+      <p class="section-subtitle">
+        Each creation is crafted with obsessive attention to detail, premium ingredients, and the primal magic of open flame.
+      </p>
+    </div>
+    <div class="divider"></div>
+    <div class="signature-grid stagger" style="margin-top: var(--space-12);">
+      <!-- Dish 1 -->
+      <article class="menu-card" id="dish-steak">
+        <div class="menu-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&q=80" alt="Oak-smoked Ribeye Steak" class="menu-card-img" loading="lazy" />
+          <div class="menu-card-badge">
+            <span class="badge badge-chef">Chef's Choice</span>
+          </div>
+        </div>
+        <div class="menu-card-body">
+          <div class="menu-card-header">
+            <h3 class="menu-card-name">Oak-Smoked Ribeye</h3>
+            <span class="menu-card-price">₹2,800</span>
+          </div>
+          <p class="menu-card-desc">400g prime ribeye, 12-hour dry-aged, fire-kissed over white oak coals. Served with truffle butter, roasted garlic confit &amp; seasonal greens.</p>
+          <div class="menu-card-tags">
+            <span class="badge badge-gf">Gluten Free</span>
+            <span class="badge badge-spicy">Bold Flavour</span>
+          </div>
+        </div>
+      </article>
+      <!-- Dish 2 -->
+      <article class="menu-card" id="dish-cocktail">
+        <div class="menu-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=800&q=80" alt="Smoke & Ember Cocktail" class="menu-card-img" loading="lazy" />
+          <div class="menu-card-badge">
+            <span class="badge badge-new">Bestseller</span>
+          </div>
+        </div>
+        <div class="menu-card-body">
+          <div class="menu-card-header">
+            <h3 class="menu-card-name">Smoke & Ember Old Fashioned</h3>
+            <span class="menu-card-price">₹850</span>
+          </div>
+          <p class="menu-card-desc">Bourbon, smoked demerara, Angostura bitters &amp; orange peel. Served tableside with aromatic cherry wood smoke under a glass dome.</p>
+          <div class="menu-card-tags">
+            <span class="badge badge-veg">Signature</span>
+          </div>
+        </div>
+      </article>
+      <!-- Dish 3 -->
+      <article class="menu-card" id="dish-dessert">
+        <div class="menu-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=80" alt="Dark Chocolate Lava Cake" class="menu-card-img" loading="lazy" />
+          <div class="menu-card-badge">
+            <span class="badge badge-veg">Vegetarian</span>
+          </div>
+        </div>
+        <div class="menu-card-body">
+          <div class="menu-card-header">
+            <h3 class="menu-card-name">Molten Dark Chocolate</h3>
+            <span class="menu-card-price">₹650</span>
+          </div>
+          <p class="menu-card-desc">72% Valrhona dark chocolate lava cake with a molten centre. Served warm with house-made vanilla bean ice cream &amp; raspberry coulis.</p>
+          <div class="menu-card-tags">
+            <span class="badge badge-veg">Vegetarian</span>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="text-center" style="margin-top: var(--space-12);">
+      <a href="menu.html" class="btn btn-outline btn-lg" id="view-full-menu-btn">View Full Menu →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- STATS                                                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="section--sm" style="background: var(--clr-surface); border-top:1px solid var(--clr-border); border-bottom:1px solid var(--clr-border);">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-number"><span data-target="8" data-suffix="+">0+</span></div>
+        <div class="stat-label">Years of Excellence</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number"><span data-target="48" data-suffix="">0</span></div>
+        <div class="stat-label">Dishes on Menu</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number"><span data-target="12000" data-suffix="+">0+</span></div>
+        <div class="stat-label">Happy Guests</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number"><span data-target="4.9" data-suffix="★">0★</span></div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- OUR STORY TEASER                                       -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="section" id="story-teaser" aria-label="Our story">
+  <div class="container">
+    <div class="split-section">
+      <div class="split-img-wrap reveal-left">
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80" alt="Head Chef Marco Rossi" class="split-img" loading="lazy" />
+        <div class="split-img-badge">Head Chef · 18 Yrs Experience</div>
+      </div>
+      <div class="reveal-right">
+        <span class="section-label">The Ember & Oak Story</span>
+        <h2 class="section-title">Born from a Passion for Fire &amp; Flavour</h2>
+        <p style="margin-bottom: var(--space-5);">
+          What started as Chef Marco Rossi's dream in a small courtyard kitchen has grown into the city's most beloved dining destination. Our philosophy is simple: respect the ingredient, master the fire, and let flavour speak.
+        </p>
+        <p style="margin-bottom: var(--space-8);">
+          Every piece of wood we burn, every herb we source, and every cocktail we shake is chosen with intention — to give you an experience that stays with you long after the last bite.
+        </p>
+        <blockquote style="border-left: 3px solid var(--clr-primary); padding-left: var(--space-5); margin-bottom: var(--space-8);">
+          <p style="font-family: var(--font-heading); font-style: italic; font-size: var(--fs-lg); color: var(--clr-text);">
+            "Fire is the world's oldest cooking technique. We're just keeping the tradition alive — with a modern soul."
+          </p>
+          <cite style="font-size: var(--fs-sm); color: var(--clr-primary); font-style: normal; margin-top: var(--space-2); display: block;">
+            — Chef Marco Rossi, Founder
+          </cite>
+        </blockquote>
+        <a href="about.html" class="btn btn-primary" id="our-story-btn">Our Full Story →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PRIVATE DINING & CELEBRATIONS                         -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="section" id="events-celebrations" aria-label="Private Dining & Celebrations" style="background: var(--clr-bg-2); border-top: 1px solid var(--clr-border);">
+  <div class="container">
+    <div class="text-center reveal" style="margin-bottom: var(--space-12);">
+      <span class="section-label">Milestones &amp; Gatherings</span>
+      <h2 class="section-title">Private Dining &amp; Celebrations</h2>
+      <p class="section-subtitle">
+        Whether it is an intimate anniversary, a milestone birthday, or a corporate success party, we make your special moments unforgettable with wood-fired magic.
+      </p>
+    </div>
+    
+    <div class="signature-grid stagger" style="margin-top: var(--space-12);">
+      <!-- Anniversary Card -->
+      <article class="menu-card" id="event-anniversary">
+        <div class="menu-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=800&q=80" alt="Anniversary Event Setup" class="menu-card-img" loading="lazy" />
+          <div class="menu-card-badge">
+            <span class="badge badge-chef">Romantic</span>
+          </div>
+        </div>
+        <div class="menu-card-body">
+          <div class="menu-card-header">
+            <h3 class="menu-card-name">Anniversaries &amp; Dates</h3>
+          </div>
+          <p class="menu-card-desc">Indulge in a romantic candlelit dinner. We offer cozy alcove seating, bespoke wine pairings, a custom tasting menu by Chef Marco, and a complimentary champagne toast to celebrate your journey.</p>
+          <div style="margin-top: var(--space-4);">
+            <a href="reservations.html" class="btn btn-outline btn-sm" style="width:100%; justify-content:center;">Book Romantic Dining</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Birthday Card -->
+      <article class="menu-card" id="event-birthday">
+        <div class="menu-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&q=80" alt="Birthday Party Table" class="menu-card-img" loading="lazy" />
+          <div class="menu-card-badge">
+            <span class="badge badge-new">Celebration</span>
+          </div>
+        </div>
+        <div class="menu-card-body">
+          <div class="menu-card-header">
+            <h3 class="menu-card-name">Birthday Gatherings</h3>
+          </div>
+          <p class="menu-card-desc">Celebrate your milestone birthdays surrounded by loved ones. Enjoy custom fire-kitchen tables, curated sharing platters, tailor-made cocktail menus, and custom pastry boards crafted in our wood-fired oven.</p>
+          <div style="margin-top: var(--space-4);">
+            <a href="reservations.html" class="btn btn-outline btn-sm" style="width:100%; justify-content:center;">Reserve Birthday Table</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Success Party Card -->
+      <article class="menu-card" id="event-success">
+        <div class="menu-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80" alt="Success Celebration Toast" class="menu-card-img" loading="lazy" />
+          <div class="menu-card-badge">
+            <span class="badge badge-veg">Corporate &amp; Group</span>
+          </div>
+        </div>
+        <div class="menu-card-body">
+          <div class="menu-card-header">
+            <h3 class="menu-card-name">Success &amp; Corporate Parties</h3>
+          </div>
+          <p class="menu-card-desc">Raise a glass to achievement. Our private dining room is fully equipped for success dinners, corporate banquets, and milestone launches, featuring custom multi-course dinners and craft cocktails.</p>
+          <div style="margin-top: var(--space-4);">
+            <a href="reservations.html" class="btn btn-outline btn-sm" style="width:100%; justify-content:center;">Book Success Party</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TESTIMONIALS                                           -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="section testimonials-section" style="background: var(--clr-surface); border-top:1px solid var(--clr-border);" id="testimonials" aria-label="Customer reviews">
+  <div class="container">
+    <div class="text-center reveal" style="margin-bottom: var(--space-12);">
+      <span class="section-label">Guest Reviews</span>
+      <h2 class="section-title">What Our Guests Say</h2>
+    </div>
+    <div class="testimonials-wrapper">
+      <div class="testimonials-track" id="testimonials-track">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"The oak-smoked ribeye was the best steak I've ever had in this city. The smoke ring was perfect, the butter melted right in — absolute perfection on a plate."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">A</div>
+            <div><div class="testimonial-name">Arjun Mehta</div><div class="testimonial-role">Food Blogger · @arjuneats</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"The Smoke & Ember Old Fashioned was a showstopper. They bring it to the table in a dome of cherry wood smoke — my guests were absolutely blown away. 10/10."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">P</div>
+            <div><div class="testimonial-name">Priya Sharma</div><div class="testimonial-role">Corporate Event Manager</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"Perfect ambience for a romantic anniversary dinner. The staff remembered it was our anniversary and surprised us with a special dessert. Felt completely special."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">R</div>
+            <div><div class="testimonial-name">Rahul & Neha</div><div class="testimonial-role">Guests since 2020</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"I've dined in 5-star restaurants across Mumbai and Delhi — Ember & Oak genuinely matches that calibre. Chef Marco's food philosophy shines through every dish."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">S</div>
+            <div><div class="testimonial-name">Siddharth Kapoor</div><div class="testimonial-role">Hospitality Consultant</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"The lava cake with house ice cream is something I dream about. And the staff? Genuinely warm and attentive. Will be back every month without question."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">M</div>
+            <div><div class="testimonial-name">Meera Nair</div><div class="testimonial-role">Regular Guest</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonials-controls">
+      <button class="testimonials-arrow" id="testimonials-prev" aria-label="Previous review">←</button>
+      <div class="testimonials-dots" id="testimonials-dots"></div>
+      <button class="testimonials-arrow" id="testimonials-next" aria-label="Next review">→</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- CTA BANNER                                             -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="cta-banner section--sm" id="cta-reserve" aria-label="Reservation call to action">
+  <div class="container text-center reveal">
+    <span class="accent-text" style="display:block; margin-bottom: var(--space-3);">Book Your Experience</span>
+    <h2 class="section-title" style="margin-bottom: var(--space-4);">Ready for an Unforgettable Evening?</h2>
+    <p class="section-subtitle" style="margin: 0 auto var(--space-8);">
+      Reserve your table today and let us craft a dining experience you'll talk about for years. 
+      Groups, anniversaries, corporate dinners — we do them all beautifully.
+    </p>
+    <div style="display:flex; gap: var(--space-4); justify-content: center; flex-wrap:wrap;">
+      <a href="reservations.html" class="btn btn-primary btn-lg ripple" id="cta-reserve-btn">🍽️ Reserve Now</a>
+      <a href="tel:+919876543210" class="btn btn-ghost btn-lg" id="cta-call-btn">📞 Call Us</a>
+    </div>
+    <p style="margin-top: var(--space-6); font-size: var(--fs-xs); color: var(--clr-muted);">
+      Open Tuesday–Sunday · Lunch 12:00–15:00 · Dinner 19:00–23:00
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- INSTAGRAM / GALLERY GRID                               -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section class="section--sm" style="background: var(--clr-bg-2);" id="instagram" aria-label="Instagram feed">
+  <div class="container">
+    <div class="text-center reveal" style="margin-bottom: var(--space-8);">
+      <span class="section-label">Follow Us</span>
+      <h2 class="section-title" style="font-size: var(--fs-2xl);">@ember_and_oak</h2>
+    </div>
+    <div class="insta-grid stagger">
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&q=75" alt="Steak" loading="lazy" /><div class="insta-item-overlay">❤️</div></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=75" alt="Ambience" loading="lazy" /><div class="insta-item-overlay">❤️</div></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=400&q=75" alt="Cocktail" loading="lazy" /><div class="insta-item-overlay">❤️</div></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=75" alt="Dessert" loading="lazy" /><div class="insta-item-overlay">❤️</div></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80" alt="Restaurant" loading="lazy" /><div class="insta-item-overlay">❤️</div></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1544025162-d76538485491?w=400&q=80" alt="BBQ" loading="lazy" /><div class="insta-item-overlay">❤️</div></div>
+    </div>
+    <div class="text-center" style="margin-top: var(--space-8);">
+      <a href="gallery.html" class="btn btn-outline" id="view-gallery-btn">View Full Gallery →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">Ember <span>&</span> Oak</div>
+        <p class="footer-brand-desc">Premium wood-fired cuisine and craft cocktails. Locally sourced, passionately crafted, unforgettable flavours — in the heart of the city.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn" aria-label="Instagram" id="footer-instagram">📸</a>
+          <a href="#" class="social-btn" aria-label="Facebook" id="footer-facebook">👤</a>
+          <a href="#" class="social-btn" aria-label="Twitter" id="footer-twitter">🐦</a>
+          <a href="#" class="social-btn" aria-label="YouTube" id="footer-youtube">▶️</a>
+        </div>
+      </div>
+      <div>
+        <h3 class="footer-heading">Quick Links</h3>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="index.html"        class="footer-link">🏠 Home</a>
+          <a href="menu.html"         class="footer-link">📋 Menu</a>
+          <a href="about.html"        class="footer-link">👨‍🍳 About</a>
+          <a href="gallery.html"      class="footer-link">🖼️ Gallery</a>
+          <a href="reservations.html" class="footer-link">🍽️ Reservations</a>
+          <a href="contact.html"      class="footer-link">📍 Contact</a>
+        </nav>
+      </div>
+      <div>
+        <h3 class="footer-heading">Contact Us</h3>
+        <div class="footer-links">
+          <span class="footer-link">📍 12 Oak Lane, Bandra West, Mumbai 400050</span>
+          <a href="tel:+919876543210" class="footer-link">📞 +91 98765 43210</a>
+          <a href="mailto:hello@emberandoak.com" class="footer-link">✉️ hello@emberandoak.com</a>
+        </div>
+      </div>
+      <div>
+        <h3 class="footer-heading">Opening Hours</h3>
+        <div class="footer-hours-item"><span class="day">Tuesday – Friday</span><span>12:00 – 23:00</span></div>
+        <div class="footer-hours-item"><span class="day">Saturday</span><span>11:00 – 23:30</span></div>
+        <div class="footer-hours-item"><span class="day">Sunday</span><span>11:00 – 22:00</span></div>
+        <div class="footer-hours-item"><span class="day">Monday</span><span style="color: #ff8080;">Closed</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Ember & Oak. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="#" class="footer-bottom-link">Privacy Policy</a>
+        <a href="#" class="footer-bottom-link">Terms of Service</a>
+        <a href="#" class="footer-bottom-link">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating Reserve Button -->
+<a href="reservations.html" class="float-reserve btn btn-primary" id="float-reserve" aria-label="Reserve a table">🍽️ Reserve</a>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
+
+<script src="js/main.js"></script>
+</body>
+</html>
